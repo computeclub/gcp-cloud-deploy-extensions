@@ -1,0 +1,69 @@
+apiVersion: skaffold/v3
+kind: Config
+metadata:
+  name: nginx-app
+  labels: {}
+build:
+  googleCloudBuild:
+    projectId: bf-infra-tooling-xyz
+    serviceAccount: projects/bf-infra-tooling-xyz/serviceAccounts/dev-deployer@bf-infra-tooling-xyz.iam.gserviceaccount.com
+  tagPolicy:
+    gitCommit: {}
+  artifacts:
+    - image: us-docker.pkg.dev/bf-infra-tooling-xyz/demo/nginx-app
+      kaniko:
+        logTimestamp: true
+        reproducible: true
+        useNewRun: true
+        verbosity: info
+        cache:
+          ttl: "24h"
+profiles:
+  - name: dev
+    manifests:
+      kustomize:
+        paths:
+          - ./kustomize/overlays/dev
+    deploy:
+      cloudrun:
+        projectid: bf-infra-tooling-xyz
+        region: us-central1
+    verify:
+      - name: alpine-wget
+        container:
+          name: alpine-wget
+          image: alpine:3.15.4
+          command: ["/bin/sh"]
+          args: ["-c", "wget example.com"]
+  - name: staging
+    manifests:
+      kustomize:
+        paths:
+          - ./kustomize/overlays/staging
+    deploy:
+      cloudrun:
+        projectid: bf-infra-tooling-xyz
+        region: us-central1
+    verify:
+      - name: alpine-wget
+        container:
+          name: alpine-wget
+          image: alpine:3.15.4
+          command: ["/bin/sh"]
+          args: ["-c", "wget example.com"]
+  - name: prod
+    manifests:
+      kustomize:
+        paths:
+          - ./kustomize/overlays/prod
+    deploy:
+      cloudrun:
+        projectid: bf-infra-tooling-xyz
+        region: us-central1
+    verify:
+      - name: alpine-wget
+        container:
+          name: alpine-wget
+          image: alpine:3.15.4
+          command: ["/bin/sh"]
+          args: ["-c", "wget example.com"]

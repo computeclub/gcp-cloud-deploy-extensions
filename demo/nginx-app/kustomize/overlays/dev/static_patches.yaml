@@ -1,0 +1,6 @@
+- op: add
+  path: /spec/template/spec/serviceAccountName
+  value: dev-nginx-app@bf-infra-tooling-xyz.iam.gserviceaccount.com
+- op: add
+  path: /metadata/name
+  value: dev-nginx-app

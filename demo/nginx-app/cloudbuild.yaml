@@ -1,0 +1,30 @@
+steps:
+  # Build the container image
+  - name: "gcr.io/kaniko-project/executor:slim"
+    args:
+      [
+        "--destination=${_REGISTRY_REPO_URL}/${_APP_NAME}:latest",
+        "--cache=true",
+        "--log-format=text",
+        "--cache-ttl=24h",
+        "--context=.",
+      ]
+  # Deploy container image to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk:slim"
+    args:
+      [
+        "gcloud",
+        "deploy",
+        "releases",
+        "create",
+        "release-${_EPOCH}",
+        "--project=${PROJECT_ID}",
+        "--region=us-central1",
+        "--delivery-pipeline=nginx-app",
+        "--images=${_REGISTRY_REPO_URL}/${_APP_NAME}=${_REGISTRY_REPO_URL}/${_APP_NAME}:latest",
+      ]
+
+substitutions:
+  _APP_NAME: nginx-app
+  _REGISTRY_REPO_URL:
+  _EPOCH:

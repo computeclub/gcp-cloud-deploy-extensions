@@ -1,0 +1,20 @@
+{
+  "message": {
+    "attributes": {
+      "Action": "Update",
+      "DeliveryPipelineId": "pipeline-id",
+      "Location": "us-east4",
+      "ProjectNumber": "957414832331",
+      "ReleaseId": "release-0123456",
+      "Resource": "projects/957414832331/locations/us-east4/deliveryPipelines/pipeline-id/releases/release-0123456/rollouts/release-0123456-to-pipeline-id-prod-0003",
+      "ResourceType": "Rollout",
+      "RolloutId": "release-0123456-to-pipeline-id-prod-0003",
+      "TargetId": "pipeline-id-prod"
+    },
+    "messageId": "6641588366820034",
+    "message_id": "6641588366820034",
+    "publishTime": "2022-12-24T06:57:07.72Z",
+    "publish_time": "2022-12-24T06:57:07.72Z"
+  },
+  "subscription": "projects/project-id/subscriptions/clouddeploy-resources-push"
+}

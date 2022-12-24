@@ -1,0 +1,19 @@
+{
+  "message": {
+    "attributes": {
+      "Action": "Required",
+      "DeliveryPipelineId": "some-id",
+      "Location": "us-east4",
+      "ProjectNumber": "957414832331",
+      "ReleaseId": "release-0ba98f6",
+      "Rollout": "projects/957414832331/locations/us-east4/deliveryPipelines/some-id/releases/release-0ba98f6/rollouts/release-0ba98f6-to-some-id-prod-0003",
+      "RolloutId": "release-0ba98f6-to-some-id-prod-0003",
+      "TargetId": "some-id-prod"
+    },
+    "messageId": "6641587404274478",
+    "message_id": "6641587404274478",
+    "publishTime": "2022-12-24T06:55:58.968Z",
+    "publish_time": "2022-12-24T06:55:58.968Z"
+  },
+  "subscription": "projects/project-id/subscriptions/approvals-push"
+}

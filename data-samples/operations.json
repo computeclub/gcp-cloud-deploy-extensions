@@ -1,0 +1,24 @@
+{
+  "message": {
+    "attributes": {
+      "Action": "Start",
+      "DeliveryPipelineId": "some-id",
+      "JobId": "deploy",
+      "JobRunId": "d4e999db-f037-4d62-8e6a-02a47a20fb63",
+      "JobType": "Deploy",
+      "Location": "us-east4",
+      "PhaseId": "stable",
+      "ProjectNumber": "957414832331",
+      "ReleaseId": "release-c068b08",
+      "Resource": "projects/957414832331/locations/us-east4/deliveryPipelines/some-id/releases/release-c068b08/rollouts/release-c068b08-to-some-id-training-0001/jobRuns/d4e999db-f037-4d62-8e6a-02a47a20fb63",
+      "ResourceType": "JobRun",
+      "RolloutId": "release-c068b08-to-some-id-training-0001",
+      "TargetId": "some-id-training"
+    },
+    "messageId": "6641587150699898",
+    "message_id": "6641587150699898",
+    "publishTime": "2022-12-24T06:52:21.22Z",
+    "publish_time": "2022-12-24T06:52:21.22Z"
+  },
+  "subscription": "projects/project-id/subscriptions/hello-clouddeploy-world"
+}
