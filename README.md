@@ -1,4 +1,4 @@
-# GCP Cloud Deploy Reactors
+# GCP Cloud Deploy Notifiers
 
 A collection of images and infra to take actions in response to GCP Cloud Deploy
 state transitions.
@@ -19,37 +19,37 @@ services necessary to build on top of that notification platform.
 
 ## Architecture
 
-The reactor recipes here follow a very similar deployment pattern to the solutions
+The notifier recipes here follow a very similar deployment pattern to the solutions
 in cloud-builders-community and cloud-build-notifiers. Namely, source code,
 dockerfiles, and cloudbuild configurations are packaged for users to build, store,
 and deploy container images to their GCP projects.
 
-Expanding on this pattern, reactor authors are encouraged to ship a small terraform
-module to stand up all the necessary infra components of a reactor (typically
-manages the reactor workload, a PubSub subscription, a service account, and the
+Expanding on this pattern, notifier authors are encouraged to ship a small terraform
+module to stand up all the necessary infra components of a notifier (typically
+manages the notifier workload, a PubSub subscription, a service account, and the
 required role memberships). This gives an more ideal deployment scenario with
 users only needing to build an image and invoke that module to make a deploy
-reactor available.
+notifier available.
 
-The way reactors are configured for usage by workload deploy pipelines differs
+The way notifiers are configured for usage by workload deploy pipelines differs
 to the cloud-build repos. Following a kubernetes-style configuration approach,
-once a deploy reactor is deployed, it can operate against notifications
+once a deploy notifier is deployed, it can operate against notifications
 originating from any Cloud Deploy pipeline but until a deploy pipeline opts-in,
-a reactor should do nothing.
+a notifier should do nothing.
 
-A workload's deploy pipeline opts-in to using a given reactor via an annotation
+A workload's deploy pipeline opts-in to using a given notifier via an annotation
 on the pipeline (and potentially annotations on targets). The annotation value
-should point to a secret in secret manager that the reactor can use for
+should point to a secret in secret manager that the notifier can use for
 configuration values during an invocation. This pattern allows any number of
-reactors to be deployed and available to workload pipelines while giving
+notifiers to be deployed and available to workload pipelines while giving
 pipeline owners a simple mechanism to enable and configure a custom set of
-reactors on their pipelines.
+notifiers on their pipelines.
 
-## Deploy reactor index
+## Deploy notifier index
 
-* [echo-fastapi](reactors/echo-fastapi/) - an example deploy reactor in Python
+* [echo-fastapi](notifiers/echo-fastapi/) - an example deploy notifier in Python
 that echos the payload.
-* echo-go - an example deploy reactor in go.
+* echo-go - an example deploy notifier in go.
 
 ## Development
 
@@ -70,3 +70,7 @@ an environment variable which many/most/maybe all Google Cloud SDKs support:
 ```bash
 export GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud auth print-access-token)
 ```
+
+## What's forthcoming?
+
+1. TODO(brandonjbjelland): Build out a demo that operates against a pipeline targeting a GKE workload

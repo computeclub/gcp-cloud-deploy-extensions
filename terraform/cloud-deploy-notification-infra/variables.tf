@@ -12,7 +12,7 @@ variable "location" {
 variable "repository_id" {
   type        = string
   description = ""
-  default     = "cloud-deploy-reactors"
+  default     = "cloud-deploy-notifiers"
 }
 
 variable "disable_apis_on_destroy" {

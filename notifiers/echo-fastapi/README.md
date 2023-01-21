@@ -46,7 +46,7 @@ deploy message types and echoing back the details of that message.
     gcloud builds submit \
         --project=${PROJECT_ID} \
         --region=us-central1 \
-        --tag us-docker.pkg.dev/${PROJECT_ID}/cloud-deploy-reactors/echo-fastapi:latest .
+        --tag us-docker.pkg.dev/${PROJECT_ID}/cloud-deploy-notifiers/echo-fastapi:latest .
     ```
 
 3. deploy all dependent infrastructure using resources in the

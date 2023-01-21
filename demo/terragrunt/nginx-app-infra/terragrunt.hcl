@@ -4,7 +4,7 @@ include {
 
 terraform {
   # TODO(brandonjbjelland): switch to a tag ref
-  # source = "github.com/computeclub/gcp-cloud-deploy-reactors//demo/nginx-app/terraform?ref=main"
+  # source = "github.com/computeclub/gcp-cloud-deploy-notifiers//demo/nginx-app/terraform?ref=main"
   source = "${find_in_parent_folders("nginx-app")}//terraform"
   after_hook "after_hook" {
     commands = ["apply"]
@@ -14,8 +14,8 @@ terraform {
       "submit",
       "--project=${local.config.locals.project_id}",
       "--substitutions=_EPOCH=${run_cmd("date", "+%s")},_REGISTRY_REPO_URL=${dependency.app_artifact_registry.outputs.artifact_registry_repo_endpoint}",
-      "--config=${find_in_parent_folders("gcp-cloud-deploy-reactors")}/demo/nginx-app/cloudbuild.yaml",
-      "${find_in_parent_folders("gcp-cloud-deploy-reactors")}/demo/nginx-app/"
+      "--config=${find_in_parent_folders("gcp-cloud-deploy-notifiers")}/demo/nginx-app/cloudbuild.yaml",
+      "${find_in_parent_folders("gcp-cloud-deploy-notifiers")}/demo/nginx-app/"
     ]
   }
 }
@@ -36,7 +36,7 @@ dependency "echo_fastapi" {
 
 
 inputs = {
-  enabled_cloud_deployers = [
+  enabled_cloud_deploy_notifiers = [
     dependency.echo_fastapi.outputs.config_annotation,
   ]
   project_id = local.config.locals.project_id

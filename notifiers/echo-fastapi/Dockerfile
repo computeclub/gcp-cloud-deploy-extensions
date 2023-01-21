@@ -14,6 +14,9 @@ WORKDIR $APP_HOME
 COPY poetry.lock pyproject.toml ${APP_HOME}/
 
 RUN apt-get update -y && \
+    apt-get install -y \
+    python-dev \
+    build-essential && \
     apt-get autoremove && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \

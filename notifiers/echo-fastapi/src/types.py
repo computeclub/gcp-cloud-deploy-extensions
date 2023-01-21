@@ -2,6 +2,7 @@
 """
 types defines the pydantic types of the relevant pubsub messages
 """
+from typing import Optional
 from pydantic import BaseModel
 
 
@@ -9,10 +10,12 @@ class BaseAttributes(BaseModel):
     """BaseAttributes."""
 
     Action: str
-    DeliveryPipelineId: str
+    DeliveryPipelineId: Optional[str]
     Location: str
     ProjectNumber: str
-    ReleaseId: str
+    ReleaseId: Optional[str]
+    TargetId: Optional[str]
+    RolloutId: Optional[str]
 
 
 class ResourcesAttributes(BaseAttributes):
@@ -26,8 +29,6 @@ class ApprovalsAttributes(BaseAttributes):
     """ApprovalsAttributes."""
 
     Rollout: str
-    RolloutId: str
-    TargetId: str
 
 
 class OperationsAttributes(BaseAttributes):
@@ -39,8 +40,6 @@ class OperationsAttributes(BaseAttributes):
     PhaseId: str
     Resource: str
     ResourceType: str
-    RolloutId: str
-    TargetId: str
 
 
 class Message(BaseModel):

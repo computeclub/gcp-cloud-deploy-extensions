@@ -16,5 +16,5 @@
     "publishTime": "2022-12-24T06:57:07.72Z",
     "publish_time": "2022-12-24T06:57:07.72Z"
   },
-  "subscription": "projects/project-id/subscriptions/clouddeploy-resources-push"
+  "subscription": "projects/project-id/subscriptions/resources-push"
 }

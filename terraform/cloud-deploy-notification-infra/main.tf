@@ -32,7 +32,7 @@ resource "google_artifact_registry_repository" "main" {
   project       = var.project_id
   location      = var.location
   repository_id = var.repository_id
-  description   = "A docker registry repo for Cloud Deploy reactors"
+  description   = "A docker registry repo for Cloud Deploy notifiers"
   format        = "DOCKER"
 }
 

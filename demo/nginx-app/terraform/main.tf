@@ -10,12 +10,13 @@ locals {
       require_approval = true
     }
   }
-  cloud_deployers = { for ecd in var.enabled_cloud_deployers :
-    ecd => "projects/${var.project_id}/secrets/${var.app_name}"
+
+  cloud_deploy_notifiers = { for ecd in var.enabled_cloud_deploy_notifiers :
+    ecd => google_secret_manager_secret.main[ecd].name
   }
   annotations = merge(
     var.annotations,
-    local.cloud_deployers
+    local.cloud_deploy_notifiers
   )
 }
 
@@ -83,7 +84,7 @@ resource "google_clouddeploy_target" "main" {
 }
 
 resource "google_secret_manager_secret" "main" {
-  for_each  = toset(var.enabled_cloud_deployers)
+  for_each  = toset(var.enabled_cloud_deploy_notifiers)
   project   = var.project_id
   secret_id = format("%s-%s", var.app_name, split("/", each.key)[1])
   labels = {

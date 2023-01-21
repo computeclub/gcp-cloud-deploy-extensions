@@ -1,14 +1,14 @@
 # TODO(brandonjacob): the core of this will be pulled into a module that other
-# reactors can share as a foundation. Bits like IAM can differ potentially enough
-# to warrant separation between reactor-core-infra and reactor-specific resources
+# notifiers can share as a foundation. Bits like IAM can differ potentially enough
+# to warrant separation between notifier-core-infra and notifier-specific resources
 locals {
-  artifact_registry_repo_endpoint = var.artifact_registry_repo_endpoint == "" ? "us-docker.pkg.dev/${var.project_id}/cloud-deploy-reactors" : var.artifact_registry_repo_endpoint
+  artifact_registry_repo_endpoint = var.artifact_registry_repo_endpoint == "" ? "us-docker.pkg.dev/${var.project_id}/cloud-deploy-notifiers" : var.artifact_registry_repo_endpoint
   cloud_deploy_notification_topics = [
     "clouddeploy-resources",
     "clouddeploy-operations",
     "clouddeploy-approvals",
   ]
-  config_annotation = "deployers.computeclub.io/${var.deployer_name}"
+  config_annotation = "deploy-notifiers.computeclub.io/${var.deployer_name}"
 }
 
 # TODO(brandonjbjelland): demonstrate a filter
@@ -20,7 +20,7 @@ resource "google_pubsub_subscription" "main" {
   topic                = each.key
   ack_deadline_seconds = 30
   labels = {
-    repo_url      = "github0com_computeclub_gcp-cloud-deploy-reactors"
+    repo_url      = "github0com_computeclub_gcp-cloud-deploy-notifiers"
     deployer_name = var.deployer_name
   }
   push_config {
@@ -49,7 +49,7 @@ resource "google_cloud_run_v2_service" "main" {
     containers {
       image = "${local.artifact_registry_repo_endpoint}/${var.deployer_name}:latest"
       env {
-        # if this annotation is present on a Cloud Deploy pipeline, this reactor
+        # if this annotation is present on a Cloud Deploy pipeline, this notifier
         # will be considered active on that pipeline. In scenarios requiring
         # configuration, the value should point to a fully-qualified secret
         name  = "DEPLOYER_CONFIG_PIPELINE_ANNOTATION"
@@ -61,11 +61,15 @@ resource "google_cloud_run_v2_service" "main" {
         name  = "DEPLOY_TIMESTAMP"
         value = timestamp()
       }
+      env {
+        name  = "PROJECT_ID"
+        value = var.project_id
+      }
     }
   }
 
   labels = {
-    repo_url      = "github0com_computeclub_gcp-cloud-deploy-reactors"
+    repo_url      = "github0com_computeclub_gcp-cloud-deploy-notifiers"
     deployer_name = var.deployer_name
   }
 }

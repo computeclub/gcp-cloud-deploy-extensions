@@ -4,17 +4,18 @@ include {
 
 terraform {
   # TODO(brandonjbjelland): switch to a tag ref
-  # source = "github.com/computeclub/gcp-cloud-deploy-reactors//reactors/echo-fastapi/terraform?ref=main"
-  source = "${find_in_parent_folders("gcp-cloud-deploy-reactors")}/reactors/echo-fastapi//terraform"
+  # source = "github.com/computeclub/gcp-cloud-deploy-notifiers//notifiers/echo-fastapi/terraform?ref=main"
+  source = "${find_in_parent_folders("gcp-cloud-deploy-notifiers")}/notifiers/echo-fastapi//terraform"
   before_hook "before_hook" {
     commands = ["apply"]
     execute = [
       "gcloud",
       "builds",
       "submit",
+      "--config=${find_in_parent_folders("gcp-cloud-deploy-notifiers")}/notifiers/echo-fastapi/cloudbuild.yaml",
       "--project=${local.config.locals.project_id}",
-      "--tag=${dependency.cloud_deploy_foundation.outputs.artifact_registry_repo_endpoint}/echo-fastapi:latest",
-      "${find_in_parent_folders("gcp-cloud-deploy-reactors")}/reactors/echo-fastapi/"
+      "--substitutions=_REGISTRY_REPO_URL=${dependency.cloud_deploy_foundation.outputs.artifact_registry_repo_endpoint}",
+      "${find_in_parent_folders("gcp-cloud-deploy-notifiers")}/notifiers/echo-fastapi/"
     ]
   }
 }
@@ -30,7 +31,7 @@ dependency "cloud_deploy_foundation" {
       location = "foo"
       name     = "bar"
     }
-    artifact_registry_repo_endpoint = "us-docker.pkg.dev/project-id/cloud-deploy-reactors"
+    artifact_registry_repo_endpoint = "us-docker.pkg.dev/project-id/cloud-deploy-notifiers"
     cloud_deploy_pubsub_topics = {
       clouddeploy-resources  = {}
       clouddeploy-operations = {}
