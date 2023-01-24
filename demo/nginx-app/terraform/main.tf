@@ -89,7 +89,7 @@ resource "google_secret_manager_secret" "main" {
   secret_id = format("%s-%s", var.app_name, split("/", each.key)[1])
   labels = {
     app      = var.app_name
-    deployer = split("/", each.key)[1]
+    notifier = split("/", each.key)[1]
   }
   replication {
     automatic = true

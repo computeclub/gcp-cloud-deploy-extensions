@@ -40,7 +40,7 @@ resource "google_secret_manager_secret_iam_member" "cloud_deploy_notifiers_secre
   project   = each.value.project
   secret_id = each.value.secret_id
   role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:${each.value.labels.deployer}@${var.project_id}.iam.gserviceaccount.com"
+  member    = "serviceAccount:${each.value.labels.notifier}@${var.project_id}.iam.gserviceaccount.com"
 }
 
 resource "google_secret_manager_secret_iam_member" "cloud_deploy_notifiers_secret_viewer" {
@@ -48,5 +48,5 @@ resource "google_secret_manager_secret_iam_member" "cloud_deploy_notifiers_secre
   project   = each.value.project
   secret_id = each.value.secret_id
   role      = "roles/secretmanager.viewer"
-  member    = "serviceAccount:${each.value.labels.deployer}@${var.project_id}.iam.gserviceaccount.com"
+  member    = "serviceAccount:${each.value.labels.notifier}@${var.project_id}.iam.gserviceaccount.com"
 }

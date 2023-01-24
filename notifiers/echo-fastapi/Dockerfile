@@ -1,5 +1,7 @@
 FROM python:3.11-slim
 
+ARG LOG_LEVEL=debug
+
 ENV PYTHONFAULTHANDLER=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONHASHSEED=random \
@@ -26,4 +28,4 @@ RUN apt-get update -y && \
 
 COPY . ./
 
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "src.main:app", "--host=0.0.0.0", "--port=8080", "--no-use-colors", "--log-level=info", "--no-access-log"]

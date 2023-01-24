@@ -3,6 +3,7 @@
 types defines the pydantic types of the relevant pubsub messages
 """
 from typing import Optional
+
 from pydantic import BaseModel
 
 
