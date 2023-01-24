@@ -11,12 +11,12 @@ variable "location" {
 
 variable "repository_id" {
   type        = string
-  description = ""
+  description = "The name of the artifact registry repo that hosts notifier images."
   default     = "cloud-deploy-notifiers"
 }
 
 variable "disable_apis_on_destroy" {
   type        = bool
-  description = ""
+  description = "A boolean controlling how destroy behaves against service APIs."
   default     = false
 }

@@ -132,3 +132,4 @@ config.hcl
 .terragrunt-cache
 .terraform
 .terraform.lock.hcl
+.vscode/settings.json

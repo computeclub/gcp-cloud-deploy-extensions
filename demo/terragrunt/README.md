@@ -4,7 +4,7 @@ This directory contains a minimal example of deploying:
 
 1. nginx-app CI/CD and infra resources.
 2. the baseline Cloud Deploy resources found in the root `terraform/` directory
-3. the `echo-fastapi` example deployer.
+3. the `echo-fastapi` example notifier.
 
 ## Cheat code - speed run
 

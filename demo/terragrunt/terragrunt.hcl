@@ -13,7 +13,7 @@ remote_state {
 }
 
 locals {
-    config = read_terragrunt_config("${find_in_parent_folders("terragrunt")}/config.hcl")
+  config = read_terragrunt_config("${find_in_parent_folders("terragrunt")}/config.hcl")
 }
 
 generate "backend" {

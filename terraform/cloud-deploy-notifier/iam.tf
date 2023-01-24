@@ -1,6 +1,6 @@
 resource "google_service_account" "main" {
   project      = var.project_id
-  account_id   = var.deployer_name
+  account_id   = var.notifier_name
   display_name = "A terraform-managed Cloud Deploy notifier workload service account"
 }
 
@@ -20,7 +20,7 @@ resource "google_artifact_registry_repository_iam_member" "main" {
 
 resource "google_service_account" "invoker" {
   project      = var.project_id
-  account_id   = "${var.deployer_name}-invoker"
+  account_id   = "${var.notifier_name}-invoker"
   display_name = "A terraform-managed Cloud Deploy notifier pubsub invoker service account"
 }
 
