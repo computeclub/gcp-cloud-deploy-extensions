@@ -13,7 +13,8 @@ from google.cloud import deploy, secretmanager
 from google.cloud.deploy_v1.types import DeliveryPipeline, GetDeliveryPipelineRequest
 from google.cloud.secretmanager_v1.types import AccessSecretVersionRequest
 
-from src.config import LOGGING_CONFIG_DICT, settings, setup_cloud_logging
+from src.logging import LOGGING_CONFIG_DICT, setup_cloud_logging
+from src.settings import settings
 from src.types import PubSubEnvelope
 
 logger = logging.getLogger(__name__)
@@ -28,8 +29,7 @@ async def setup_logging() -> None:
     setup_logging sets up structured logging when running on Cloud Run.
     """
     logging_config.dictConfig(LOGGING_CONFIG_DICT)
-    # TODO(brandonjbjelland): the K_SERVICE env var should only be present when running
-    # as a knative service - so not local. Find a better way to determine this.
+    # the K_SERVICE env var should only be present when running as a knative service
     if os.environ.get("K_SERVICE"):
         setup_cloud_logging()
 
@@ -59,6 +59,7 @@ async def index(request: Request) -> JSONResponse:
             status_code=400,
         )
 
+    # TODO(brandonjbjelland): I think these are Updates to Resources but verify
     if envelope.message.attributes.Action == "Update":
         logger.info("skipping message with Update action")
         return JSONResponse(content={"status": "Update actions are a no-op"})
