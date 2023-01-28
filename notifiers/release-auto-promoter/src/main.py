@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-"""This is an example Cloud Deploy app responder."""
+"""
+This Cloud Deploy notifier promotes releases to the next target(s) as soon as
+verification on a previous rollout succeeds.
+"""
 import json
 import logging
 import os
@@ -13,8 +16,8 @@ from google.cloud import deploy, secretmanager
 from google.cloud.deploy_v1.types import DeliveryPipeline, GetDeliveryPipelineRequest
 from google.cloud.secretmanager_v1.types import AccessSecretVersionRequest
 
+from src.config import LOGGING_CONFIG_DICT, settings, setup_cloud_logging
 from src.types import PubSubEnvelope
-from src.logging import setup_cloud_logging
 
 logger = logging.getLogger(__name__)
 
@@ -91,8 +94,19 @@ async def index(request: Request) -> JSONResponse:
     if not config:
         return JSONResponse(content={"status": "No secret found"})
 
+    if (
+        "promotable_target" in config
+        and envelope.message.attributes.TargetId in config["promotable_target"]
+    ):
+        promote_release()
     logger.info("successfully fetched config from secret manager: %s", config)
     return JSONResponse(content={"status": "OK"})
+
+
+def promote_release():
+    """
+    .
+    """
 
 
 def get_pipeline_id(attributes) -> str:

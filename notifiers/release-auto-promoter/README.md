@@ -1,6 +1,6 @@
-# echo-fastapi
+# release-auto-promoter
 
-Echo fastapi is a minimal Cloud Deployer called by subscriptions of all cloud
+release-auto-promoter is a Cloud Deployer called by subscriptions of all cloud
 deploy message types and echoing back the details of that message.
 
 ## Developing
@@ -46,7 +46,7 @@ deploy message types and echoing back the details of that message.
     gcloud builds submit \
         --project=${PROJECT_ID} \
         --region=us-central1 \
-        --tag us-docker.pkg.dev/${PROJECT_ID}/cloud-deploy-notifiers/echo-fastapi:latest .
+        --tag us-docker.pkg.dev/${PROJECT_ID}/cloud-deploy-notifiers/release-auto-promoter:latest .
     ```
 
 3. deploy all dependent infrastructure using resources in the
@@ -54,6 +54,6 @@ deploy message types and echoing back the details of that message.
 the repo root as an example:
 
     ```bash
-    cd demo/terragrunt/echo-fastapi
+    cd demo/terragrunt/release-auto-promoter
     terragrunt apply
     ```
