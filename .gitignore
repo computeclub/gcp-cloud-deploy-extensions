@@ -132,3 +132,4 @@ config.hcl
 .terraform
 .terraform.lock.hcl
 .vscode/settings.json
+.env

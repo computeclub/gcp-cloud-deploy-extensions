@@ -73,4 +73,7 @@ export GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud auth print-access-token)
 
 ## What's forthcoming?
 
-1. TODO(brandonjbjelland): Build out a demo that operates against a pipeline targeting a GKE workload
+1. Build out a demo that operates against a pipeline targeting a GKE workload
+2. create an example notifier in go
+3. build a second go notifier, extract an interface
+4. blog posts discussing the nuts and bolts of the project

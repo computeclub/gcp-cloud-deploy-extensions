@@ -40,7 +40,7 @@ RUN echo "installing local dev dependencies" && \
     poetry config virtualenvs.create false && \
     # install terraform
     curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_linux_amd64.zip && \
-    # TODO(brandonjbjelland): verify download against checksum  b8cf184dee15dfa89713fe56085313ab23db22e17284a9a27c0999c67ce3021e
+    # TODO(bjb): verify download against checksum  b8cf184dee15dfa89713fe56085313ab23db22e17284a9a27c0999c67ce3021e
     unzip -o terraform_linux_amd64.zip -d /usr/local/bin/ && \
     chmod +x /usr/local/bin/terraform && \
     rm terraform_linux_amd64.zip && \

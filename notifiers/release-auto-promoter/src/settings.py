@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import annotations
 from clouddeploy_notifier.settings import BaseNotifierSettings
 
 
@@ -11,4 +12,4 @@ class NotifierSettings(BaseNotifierSettings):
     app_name: str = "release-auto-promoter"
 
 
-settings = Settings()  # type: ignore
+settings = NotifierSettings()  # type: ignore

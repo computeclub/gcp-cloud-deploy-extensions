@@ -59,7 +59,7 @@ async def index(request: Request) -> JSONResponse:
             status_code=400,
         )
 
-    # TODO(brandonjbjelland): I think these are Updates to Resources but verify
+    # TODO(bjb): I think these are Updates to Resources but verify
     if envelope.message.attributes.Action == "Update":
         logger.info("skipping message with Update action")
         return JSONResponse(content={"status": "Update actions are a no-op"})
@@ -79,15 +79,13 @@ async def index(request: Request) -> JSONResponse:
     if not notifier_annotation_exists:
         logger.info(
             "annotation (%s) for notifier %s was not found on this pipeline",
-            {os.environ["NOTIFIER_CONFIG_PIPELINE_ANNOTATION"]},
+            {os.environ["ANNOTATION"]},
             settings.app_name,
         )
         return JSONResponse(content={"status": "annotation not found"})
 
     config = get_config_from_secret(
-        secret_id=pipeline.annotations[  # type: ignore
-            os.environ["NOTIFIER_CONFIG_PIPELINE_ANNOTATION"]
-        ]
+        secret_id=pipeline.annotations[os.environ["ANNOTATION"]]  # type: ignore
     )
     if not config:
         return JSONResponse(content={"status": "No secret found"})
@@ -121,18 +119,17 @@ def pipeline_has_notifier_annotation(
     pipeline_has_notifier_annotation.
     """
     logger.debug("getting pipeline")
-    # TODO(brandonjbjelland): try the Async clients
     deploy_client = deploy.CloudDeployClient()
     pipeline_request = GetDeliveryPipelineRequest(name=pipeline_id)
     try:
         pipeline: DeliveryPipeline = deploy_client.get_delivery_pipeline(
             pipeline_request
-        )  # TODO(brandonjbjelland): catch specific exception
+        )  # TODO(bjb): catch specific exception
     except Exception as err:
         logger.critical(err)
         return (False, None)
 
-    if os.environ["NOTIFIER_CONFIG_PIPELINE_ANNOTATION"] in pipeline.annotations:
+    if os.environ["ANNOTATION"] in pipeline.annotations:
         return (True, pipeline)
     return (False, pipeline)
 

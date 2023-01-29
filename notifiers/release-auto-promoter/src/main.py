@@ -7,13 +7,9 @@ from typing import Any, Dict
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from google.api_core.exceptions import PermissionDenied
-from google.cloud import deploy, secretmanager
-from google.cloud.deploy_v1.types import DeliveryPipeline, GetDeliveryPipelineRequest
-from google.cloud.secretmanager_v1.types import AccessSecretVersionRequest
 
-from clouddeploy_notifier.logging import LOGGING_CONFIG_DICT, setup_cloud_logging
-from clouddeploy_notifier.types import PubSubEnvelope
+from clouddeploy_notifier.log_config import LOGGING_CONFIG_DICT, setup_cloud_logging
+
 from src.settings import settings
 from src.notifier import Notifier
 
@@ -46,7 +42,7 @@ async def index(request: Request) -> JSONResponse:
     """
     body: Dict[str, Any] = await request.json()
     try:
-        notifier = Notifier(body)
+        notifier = Notifier(request_json=body, annotation=settings.annotation)
     except Exception as err:
         logger.critical("json payload could not be parsed: %s", err)
         logger.critical(body)
@@ -54,7 +50,4 @@ async def index(request: Request) -> JSONResponse:
             content={"status": "Failed to parse json payload"},
             status_code=400,
         )
-    pipeline_id: str = notifier.get_pipeline_id()
-    (notifier_annotation_exists, pipeline) = notifier.pipeline_has_notifier_annotation(
-        pipeline_id
-    )
+    return notifier.execute()

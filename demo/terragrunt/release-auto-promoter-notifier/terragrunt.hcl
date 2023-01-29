@@ -22,7 +22,7 @@ terraform {
 
 locals {
   config        = read_terragrunt_config(find_in_parent_folders("config.hcl"))
-  notifier_path = "${find_in_parent_folders("gcp-cloud-deploy-notifiers")}/notifiers/echo-fastapi"
+  notifier_path = "${find_in_parent_folders("gcp-cloud-deploy-notifiers")}/notifiers/release-auto-promoter"
 }
 
 dependency "cloud_deploy_foundation" {
@@ -42,6 +42,12 @@ dependency "cloud_deploy_foundation" {
 
 inputs = {
   artifact_registry_repo = dependency.cloud_deploy_foundation.outputs.artifact_registry_repo
+  cloud_deploy_notification_subscriptions = [
+    {
+      topic  = "clouddeploy-operations"
+      filter = "attributes.Action = \"Succeed\" AND attributes.ResourceType = \"Rollout\""
+    },
+  ]
   env_vars = [
     {
       name  = "LOG_LEVEL"
@@ -62,7 +68,7 @@ inputs = {
       )
     },
   ]
-  notifier_name = "echo-fastapi"
+  notifier_name = "release-auto-promoter"
   project_id    = local.config.locals.project_id
   region        = "us-central1"
 }
