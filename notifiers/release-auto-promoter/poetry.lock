@@ -723,7 +723,7 @@ python-dotenv = "^0.21.1"
 type = "git"
 url = "https://github.com/computeclub/gcp-cloud-deploy-notifiers.git"
 reference = "feat/extract-python-library"
-resolved_reference = "6d34631b56d1e93e3231e954a18d90962ce7d71f"
+resolved_reference = "d572b72321827e670dbddf11c7ddb28382e2df26"
 subdirectory = "lib/python-notifier"
 [[package]]
 name = "python-dotenv"
