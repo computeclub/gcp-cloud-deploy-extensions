@@ -37,8 +37,8 @@ class Notifier(BaseNotifier):
         rollout.description = "A rollout created by release-auto-promoter"
 
         request = CreateRolloutRequest(
-            parent="projects/{project_id}/locations/{location_name}/deliveryPipelines/{pipeline_name}/releases/{release_name}",
-            rollout_id=f"release-{self.attributes.ReleaseId}-to-{target_id}-{str(uuid.uuid4)[0:8]}",
+            parent=f"projects/{self.attributes.ProjectNumber}/locations/{self.attributes.Location}/deliveryPipelines/{self.attributes.DeliveryPipelineId}/releases/{self.attributes.ReleaseId}",
+            rollout_id=f"{self.attributes.ReleaseId}-to-{target_id}-{str(uuid.uuid4())[0:8]}",
             rollout=rollout,
         )
 
