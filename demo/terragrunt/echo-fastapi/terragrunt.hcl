@@ -31,6 +31,8 @@ dependency "cloud_deploy_foundation" {
     artifact_registry_repo = {
       location = "foo"
       name     = "bar"
+      format   = "docker"
+      project  = "my-project-id"
     }
     cloud_deploy_pubsub_topics = {
       clouddeploy-resources  = {}

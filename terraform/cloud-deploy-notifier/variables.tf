@@ -50,3 +50,10 @@ variable "region" {
   description = ""
   type        = string
 }
+
+variable "workload_sa_project_roles" {
+  type = list(string)
+  default = [
+    "roles/clouddeploy.viewer",
+  ]
+}

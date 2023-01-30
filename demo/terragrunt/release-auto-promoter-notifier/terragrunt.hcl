@@ -31,6 +31,8 @@ dependency "cloud_deploy_foundation" {
     artifact_registry_repo = {
       location = "foo"
       name     = "bar"
+      format   = "docker"
+      project  = "my-project-id"
     }
     cloud_deploy_pubsub_topics = {
       clouddeploy-resources  = {}
@@ -71,4 +73,7 @@ inputs = {
   notifier_name = "release-auto-promoter"
   project_id    = local.config.locals.project_id
   region        = "us-central1"
+  workload_sa_project_roles = [
+    "roles/clouddeploy.releaser",
+  ]
 }

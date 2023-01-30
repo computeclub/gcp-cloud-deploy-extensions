@@ -5,9 +5,10 @@ resource "google_service_account" "main" {
 }
 
 resource "google_project_iam_member" "main" {
-  project = var.project_id
-  role    = "roles/clouddeploy.viewer"
-  member  = "serviceAccount:${google_service_account.main.email}"
+  for_each = toset(var.workload_sa_project_roles)
+  project  = var.project_id
+  role     = each.key
+  member   = "serviceAccount:${google_service_account.main.email}"
 }
 
 resource "google_artifact_registry_repository_iam_member" "main" {

@@ -24,12 +24,17 @@ in cloud-builders-community and cloud-build-notifiers. Namely, source code,
 dockerfiles, and cloudbuild configurations are packaged for users to build, store,
 and deploy container images to their GCP projects.
 
-Expanding on this pattern, notifier authors are encouraged to ship a small terraform
-module to stand up all the necessary infra components of a notifier (typically
-manages the notifier workload, a PubSub subscription, a service account, and the
-required role memberships). This gives an more ideal deployment scenario with
-users only needing to build an image and invoke that module to make a deploy
-notifier available.
+Expanding on this pattern, to manage notifier infra, authors should either:
+
+1. verify the `terraform/cloud-deploy-notifier` root module is sufficient to
+manage all dependent infra for the notifier or
+2. build a small terraform module, that likely calls `terraform/cloud-deploy-notifier`
+to manage all dependent infra.
+
+In either case, including an example of the variable inputs in an `example.tfvars`
+file is a simple way to guide notifier consumers on how to run this terraform.
+
+## Notifier configuration per pipeline
 
 The way notifiers are configured for usage by workload deploy pipelines differs
 to the cloud-build repos. Following a kubernetes-style configuration approach,
