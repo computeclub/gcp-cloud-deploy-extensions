@@ -10,7 +10,7 @@ locals {
   env_vars = setunion(
     toset(var.env_vars),
     toset([{
-      name  = "NOTIFIER_CONFIG_PIPELINE_ANNOTATION"
+      name  = "ANNOTATION"
       value = local.config_annotation
     }])
   )
@@ -36,7 +36,7 @@ resource "google_pubsub_subscription" "main" {
   }
 }
 
-# TODO(brandonjbjelland): add a deadletter topic and pull sub
+# TODO(bjb): add a deadletter topic and pull sub
 
 
 resource "google_cloud_run_v2_service" "main" {

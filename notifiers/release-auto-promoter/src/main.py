@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-"""This is an example Cloud Deploy app responder."""
+"""A Cloud Deploy Notifier to automatically promote releases as they succeed in pipelines."""
 import logging
-from logging import config as logging_config
 import os
+from logging import config as logging_config
 from typing import Any, Dict
 
+from clouddeploy_notifier.log_config import LOGGING_CONFIG_DICT, setup_cloud_logging
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from clouddeploy_notifier.log_config import LOGGING_CONFIG_DICT, setup_cloud_logging
-
-from src.settings import settings
 from src.notifier import Notifier
+from src.settings import settings
 
 logger = logging.getLogger(__name__)
 app: FastAPI = FastAPI()
@@ -23,7 +22,6 @@ async def setup_logging() -> None:
     setup_logging sets up structured logging when running on Cloud Run.
     """
     logging_config.dictConfig(LOGGING_CONFIG_DICT)
-    # the K_SERVICE env var should only be present when running as a knative service
     if os.environ.get("K_SERVICE"):
         setup_cloud_logging()
 
@@ -51,7 +49,4 @@ async def index(request: Request) -> JSONResponse:
             content={"status": "Failed to parse json payload"},
             status_code=400,
         )
-    return notifier.execute(
-        kw_arg_example="hello world!",
-        message_attributes=notifier.attributes,
-    )
+    return notifier.execute()

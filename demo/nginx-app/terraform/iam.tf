@@ -50,3 +50,10 @@ resource "google_secret_manager_secret_iam_member" "cloud_deploy_notifiers_secre
   role      = "roles/secretmanager.viewer"
   member    = "serviceAccount:${each.value.labels.notifier}@${var.project_id}.iam.gserviceaccount.com"
 }
+
+resource "google_service_account_iam_member" "deployer_sa_users" {
+  for_each           = toset(var.deployer_service_account_users)
+  service_account_id = google_service_account.app_deployer.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = each.key
+}

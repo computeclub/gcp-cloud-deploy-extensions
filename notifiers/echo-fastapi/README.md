@@ -1,7 +1,19 @@
 # echo-fastapi
 
 Echo fastapi is a minimal Cloud Deployer called by subscriptions of all cloud
-deploy message types and echoing back the details of that message.
+deploy message types and echoing back the details of that message and the
+configurations passed to the `execute()` method.
+
+## User story
+
+As an engineer, I want an example notifier demonstrating usage of the python-notifier
+library. It would also be useful if this example notifier emitted pubsub
+message contents I can better understand the attribute conditions needed to
+build other notifiers.
+
+## Configuration schema
+
+`enabled` - a boolean that enables or disables the notifier. If not present the notifier is disabled.
 
 ## Developing
 
@@ -50,8 +62,8 @@ deploy message types and echoing back the details of that message.
     ```
 
 3. deploy all dependent infrastructure using resources in the
-`echo-fastapi/terraform` directory. Using the terragrunt-based demo at the
-repo root as an example:
+`terraform/cloud-deploy-notifier` directory at the repo root. Using the
+terragrunt-based demo at the repo root as an example:
 
     ```bash
     cd demo/terragrunt/echo-fastapi

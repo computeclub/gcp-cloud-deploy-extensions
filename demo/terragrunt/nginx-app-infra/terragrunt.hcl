@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  # TODO(brandonjbjelland): switch to a tag ref
+  # TODO(bjb): switch to a tag ref
   # source = "github.com/computeclub/gcp-cloud-deploy-notifiers//demo/nginx-app/terraform?ref=main"
   source = "${find_in_parent_folders("nginx-app")}//terraform"
   after_hook "after_hook" {
@@ -34,10 +34,18 @@ dependency "echo_fastapi" {
   mock_outputs = {}
 }
 
+dependency "release_auto_promoter_notifier" {
+  config_path  = "${find_in_parent_folders("terragrunt")}/release-auto-promoter-notifier"
+  mock_outputs = {}
+}
 
 inputs = {
+  deployer_service_account_users = [
+    "serviceAccount:${dependency.release_auto_promoter_notifier.outputs.workload_service_account.email}"
+  ]
   enabled_cloud_deploy_notifiers = [
     dependency.echo_fastapi.outputs.config_annotation,
+    dependency.release_auto_promoter_notifier.outputs.config_annotation,
   ]
   project_id = local.config.locals.project_id
 }
