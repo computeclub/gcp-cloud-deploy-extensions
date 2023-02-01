@@ -1,29 +1,10 @@
 # -*- coding: utf-8 -*-
-"""config contains logging and app configurations."""
+"""."""
+# -*- coding: utf-8 -*-
 import logging
-import os
 
 from google.cloud import logging as cloud_logging
-from pydantic import BaseSettings
-
-
-class Settings(BaseSettings):
-    """
-    Application settings.
-    """
-
-    app_name: str = "echo-fastapi"
-    log_level: str = os.environ.get("LOG_LEVEL") or logging.getLevelName(
-        logging.getLogger("uvicorn.error").level
-    )
-
-    class Config:
-        """Enables dotenv files to be read at startup."""
-
-        env_file = ".env"
-
-
-settings = Settings()  # type: ignore
+from clouddeploy_notifier.settings import settings
 
 LOGGING_CONFIG_DICT = {
     "version": 1,

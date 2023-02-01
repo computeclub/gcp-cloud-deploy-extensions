@@ -5,17 +5,18 @@ state transitions.
 
 Similar to the collection of cloud builders at
 [cloud-builders-community](https://github.com/GoogleCloudPlatform/cloud-builders-community)
-and [cloud-build-notifiers](https://github.com/GoogleCloudPlatform/cloud-build-notifiers),
+and notifiers at
+[cloud-build-notifiers](https://github.com/GoogleCloudPlatform/cloud-build-notifiers),
 this repo aims to be a commons of utilities to enhance
 [Google Cloud Deploy](https://cloud.google.com/deploy/docs/overview). Google
 Cloud Deploy provides essential primitives, a useful UI, and granular permissions
-for managing deployments that can span many environments in Google Cloud. Cloud
+for managing releases that can span many environments in Google Cloud. Cloud
 Deploy also lacks some features and functionality of established CI/CD tools
-(notifications, automatic release promotion, auto-rollback on verification failure,
+(notifications, conditional release promotion, auto-rollback on verification failure,
 post-deploy image tagging, etc.) but instead gives extension points via
 [PubSub notifications](https://cloud.google.com/deploy/docs/subscribe-deploy-notifications)
-to flexibly fill these gaps. The solutions here stand up infrastructure and
-services necessary to build on top of that notification platform.
+to flexibly fill these gaps. The notifier solutions here stand up infrastructure
+and services necessary to build on top of that notification platform.
 
 ## Architecture
 
@@ -24,32 +25,38 @@ in cloud-builders-community and cloud-build-notifiers. Namely, source code,
 dockerfiles, and cloudbuild configurations are packaged for users to build, store,
 and deploy container images to their GCP projects.
 
-Expanding on this pattern, notifier authors are encouraged to ship a small terraform
-module to stand up all the necessary infra components of a notifier (typically
-manages the notifier workload, a PubSub subscription, a service account, and the
-required role memberships). This gives an more ideal deployment scenario with
-users only needing to build an image and invoke that module to make a deploy
-notifier available.
+Expanding on this pattern, to manage notifier infra, authors should either:
 
-The way notifiers are configured for usage by workload deploy pipelines differs
-to the cloud-build repos. Following a kubernetes-style configuration approach,
-once a deploy notifier is deployed, it can operate against notifications
-originating from any Cloud Deploy pipeline but until a deploy pipeline opts-in,
-a notifier should do nothing.
+1. verify the `terraform/cloud-deploy-notifier` root module is sufficient to
+manage all dependent infra for the notifier or
+2. build a small terraform module, that likely calls `terraform/cloud-deploy-notifier`
+to manage all dependent infra.
 
-A workload's deploy pipeline opts-in to using a given notifier via an annotation
-on the pipeline (and potentially annotations on targets). The annotation value
-should point to a secret in secret manager that the notifier can use for
-configuration values during an invocation. This pattern allows any number of
-notifiers to be deployed and available to workload pipelines while giving
-pipeline owners a simple mechanism to enable and configure a custom set of
-notifiers on their pipelines.
+In either case, including an example of the variable inputs in an `example.tfvars`
+file is a simple way to guide notifier consumers on how to run this terraform.
+
+## Per Pipeline notifier configuration
+
+Once deployed, notifiers are configured via workload deploy pipelines that opt-in
+to using them. Following a kubernetes-style configuration approach, each notifier
+has a distinct configuration annotation key that Cloud Deploy Pipelines must
+include if they want to leverage a notifier.
+
+The annotation value should point to a user-configured secret in Secret Manager.
+This secret should contain configuration values that the notifier unpacks during
+an execution. This is a powerful pattern for a few reasons:
+
+1. It's secure - some notifiers will require secret data, others won't necessarily, but it's not a bad practice to treat all configuration as sensitive and RBAC controlled.
+2. Notifiers can be liberally deployed without affecting existing deploy pipelines - enabling a notifier requires an annotation on opting-in deployment pipelines and the configuration in secret manager.
 
 ## Deploy notifier index
 
-* [echo-fastapi](notifiers/echo-fastapi/) - an example deploy notifier in Python
-that echos the payload.
-* echo-go - an example deploy notifier in go.
+* [echo-fastapi](notifiers/echo-fastapi/) is an example deploy notifier in Python
+that echos the payload, the configuration secret contents, and kwargs.
+* [release-auto-promoter](notifiers/release-auto-promoter/) is a notifier that
+promotes releases as rollouts in deploy pipeline succeed. This reduces a manual
+task from release managers or engineers who just want successful deployments to
+be promoted to higher envs.
 
 ## Development
 
@@ -71,6 +78,9 @@ an environment variable which many/most/maybe all Google Cloud SDKs support:
 export GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud auth print-access-token)
 ```
 
-## What's forthcoming?
+## What's upcoming?
 
-1. TODO(brandonjbjelland): Build out a demo that operates against a pipeline targeting a GKE workload
+1. Build out a demo that operates against a pipeline targeting a GKE workload
+2. create an example notifier in go
+3. build a second go notifier, extract an interface
+4. blog posts discussing the nuts and bolts of the project

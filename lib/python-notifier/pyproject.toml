@@ -1,0 +1,20 @@
+[tool.poetry]
+authors = ["Brandon Bjelland <brandonjacob@google.com>"]
+description = ""
+name = "python-clouddeploy-notifier"
+packages = [{include = "clouddeploy_notifier"}]
+readme = "README.md"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+fastapi = "^0.89.1"
+google-cloud-deploy = "^1.6.1"
+google-cloud-logging = "^3.5.0"
+google-cloud-secret-manager = "^2.15.1"
+pydantic = "^1.10.4"
+python = "^3.10"
+python-dotenv = "^0.21.1"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]

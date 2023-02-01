@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  # TODO(brandonjbjelland): switch to a tag ref
+  # TODO(bjb): switch to a tag ref
   # source = "github.com/computeclub/gcp-cloud-deploy-notifiers//terraform/cloud-deploy-notification-infra?ref=main"
   source = "${find_in_parent_folders("gcp-cloud-deploy-notifiers")}//terraform/cloud-deploy-notification-infra"
 }
