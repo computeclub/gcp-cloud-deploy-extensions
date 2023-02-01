@@ -3,8 +3,6 @@ include {
 }
 
 terraform {
-  # TODO(bjb): switch to a tag ref
-  # source = "github.com/computeclub/gcp-cloud-deploy-notifiers//demo/nginx-app/terraform?ref=main"
   source = "${find_in_parent_folders("nginx-app")}//terraform"
   after_hook "after_hook" {
     commands = ["apply"]
