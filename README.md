@@ -35,27 +35,28 @@ to manage all dependent infra.
 In either case, including an example of the variable inputs in an `example.tfvars`
 file is a simple way to guide notifier consumers on how to run this terraform.
 
-## Notifier configuration per pipeline
+## Per Pipeline notifier configuration
 
-The way notifiers are configured for usage by workload deploy pipelines differs
-to the cloud-build repos. Following a kubernetes-style configuration approach,
-once a deploy notifier is deployed, it can operate against notifications
-originating from any Cloud Deploy pipeline but until a deploy pipeline opts-in,
-a notifier should do nothing.
+Once deployed, notifiers are configured via workload deploy pipelines that opt-in
+to using them. Following a kubernetes-style configuration approach, each notifier
+has a distinct configuration annotation key that Cloud Deploy Pipelines must
+include if they want to leverage a notifier.
 
-A workload's deploy pipeline opts-in to using a given notifier via an annotation
-on the pipeline (and potentially annotations on targets). The annotation value
-should point to a secret in secret manager that the notifier can use for
-configuration values during an invocation. This pattern allows any number of
-notifiers to be deployed and available to workload pipelines while giving
-pipeline owners a simple mechanism to enable and configure a custom set of
-notifiers on their pipelines.
+The annotation value should point to a user-configured secret in Secret Manager.
+This secret should contain configuration values that the notifier unpacks during
+an execution. This is a powerful pattern for a few reasons:
+
+1. It's secure - some notifiers will require secret data, others won't necessarily, but it's not a bad practice to treat all configuration as sensitive and RBAC controlled.
+2. Notifiers can be liberally deployed without affecting existing deploy pipelines - enabling a notifier requires an annotation on opting-in deployment pipelines and the configuration in secret manager.
 
 ## Deploy notifier index
 
-* [echo-fastapi](notifiers/echo-fastapi/) - an example deploy notifier in Python
-that echos the payload.
-* echo-go - an example deploy notifier in go.
+* [echo-fastapi](notifiers/echo-fastapi/) is an example deploy notifier in Python
+that echos the payload, the configuration secret contents, and kwargs.
+* [release-auto-promoter](notifiers/release-auto-promoter/) is a notifier that
+promotes releases as rollouts in deploy pipeline succeed. This reduces a manual
+task from release managers or engineers who just want successful deployments to
+be promoted to higher envs.
 
 ## Development
 
@@ -77,7 +78,7 @@ an environment variable which many/most/maybe all Google Cloud SDKs support:
 export GOOGLE_OAUTH_ACCESS_TOKEN=$(gcloud auth print-access-token)
 ```
 
-## What's forthcoming?
+## What's upcoming?
 
 1. Build out a demo that operates against a pipeline targeting a GKE workload
 2. create an example notifier in go
