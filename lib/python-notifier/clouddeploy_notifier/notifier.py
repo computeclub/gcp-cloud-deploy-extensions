@@ -3,7 +3,7 @@ import abc
 import json
 import logging
 from typing import Any, Dict, Optional
-from clouddeploy_notifier.exceptions import UnknownMessageType, UnkownPipeline
+from clouddeploy_notifier.exceptions import UnkownPipeline
 
 from clouddeploy_notifier.types import (
     ApprovalsAttributes,
@@ -163,14 +163,3 @@ class BaseNotifier(abc.ABC):
             return {}
 
         return secret_contents
-
-    @staticmethod
-    def get_release_id(
-        attributes: ApprovalsAttributes | OperationsAttributes | ResourcesAttributes,
-    ) -> Optional[str]:
-        """
-        get_release_id derives the release_id from attributes when possible. If
-        successfully determined, the format is:
-        projects/{project_id}/locations/{location_name}/deliveryPipelines/{pipeline_name}/releases/{release_name}.
-        """
-        pass
