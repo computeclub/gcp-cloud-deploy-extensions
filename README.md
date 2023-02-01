@@ -46,7 +46,7 @@ The annotation value should point to a user-configured secret in Secret Manager.
 This secret should contain configuration values that the notifier unpacks during
 an execution. This is a powerful pattern for a few reasons:
 
-1. It's secure - some notifiers will require secret data, others won't necessarily, but it's not a bad practice to treat all configuration as sensitive and RBAC controlled.
+1. It's secure - some notifiers will require secret data, others won't necessarily, but it's a good practice to treat all configuration as potentially sensitive and RBAC controlled.
 2. Notifiers can be liberally deployed without affecting existing deploy pipelines - enabling a notifier requires an annotation on opting-in deployment pipelines and the configuration in secret manager.
 
 ## Deploy notifier index

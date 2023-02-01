@@ -3,9 +3,8 @@ include {
 }
 
 terraform {
-  # TODO(bjb): switch to a tag ref
-  # source = "github.com/computeclub/gcp-cloud-deploy-notifiers//terraform/cloud-deploy-notifier?ref=main"
-  source = "${find_in_parent_folders("gcp-cloud-deploy-notifiers")}//terraform/cloud-deploy-notifier"
+  source = "github.com/computeclub/gcp-cloud-deploy-notifiers//terraform/cloud-deploy-notifier?ref=v0.1.0"
+  # source = "${find_in_parent_folders("gcp-cloud-deploy-notifiers")}//terraform/cloud-deploy-notifier"
   before_hook "before_hook" {
     commands = ["apply"]
     execute = [
@@ -47,7 +46,7 @@ inputs = {
   env_vars = [
     {
       name  = "LOG_LEVEL"
-      value = "INFO"
+      value = "DEBUG"
     },
     {
       name = "SRC_SHA1"
