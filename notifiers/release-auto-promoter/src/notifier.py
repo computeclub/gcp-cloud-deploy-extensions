@@ -21,8 +21,13 @@ class Notifier(BaseNotifier):
             idx
             for idx, stage in enumerate(self.pipeline.serial_pipeline.stages)
             if stage.target_id == self.attributes.TargetId
-        ][0]
-        if len(self.pipeline.serial_pipeline.stages) == completed_stage_index:
+        ]
+
+        if (
+            completed_stage_index
+            and len(self.pipeline.serial_pipeline.stages)
+            == completed_stage_index[0] + 1
+        ):
             logger.info(
                 "Rollout succeeded on the final stage. Nowhere to promote further. Exiting."
             )

@@ -5,17 +5,18 @@ state transitions.
 
 Similar to the collection of cloud builders at
 [cloud-builders-community](https://github.com/GoogleCloudPlatform/cloud-builders-community)
-and [cloud-build-notifiers](https://github.com/GoogleCloudPlatform/cloud-build-notifiers),
+and notifiers at
+[cloud-build-notifiers](https://github.com/GoogleCloudPlatform/cloud-build-notifiers),
 this repo aims to be a commons of utilities to enhance
 [Google Cloud Deploy](https://cloud.google.com/deploy/docs/overview). Google
 Cloud Deploy provides essential primitives, a useful UI, and granular permissions
-for managing deployments that can span many environments in Google Cloud. Cloud
+for managing releases that can span many environments in Google Cloud. Cloud
 Deploy also lacks some features and functionality of established CI/CD tools
-(notifications, automatic release promotion, auto-rollback on verification failure,
+(notifications, conditional release promotion, auto-rollback on verification failure,
 post-deploy image tagging, etc.) but instead gives extension points via
 [PubSub notifications](https://cloud.google.com/deploy/docs/subscribe-deploy-notifications)
-to flexibly fill these gaps. The solutions here stand up infrastructure and
-services necessary to build on top of that notification platform.
+to flexibly fill these gaps. The notifier solutions here stand up infrastructure
+and services necessary to build on top of that notification platform.
 
 ## Architecture
 
