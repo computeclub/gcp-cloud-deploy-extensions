@@ -34,7 +34,7 @@ class Notifier(BaseNotifier):
             return None
 
         target_id = self.pipeline.serial_pipeline.stages[
-            completed_stage_index + 1
+            completed_stage_index[0] + 1
         ].target_id
 
         rollout = Rollout()
