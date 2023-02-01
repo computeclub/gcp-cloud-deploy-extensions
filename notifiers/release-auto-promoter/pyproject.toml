@@ -1,10 +1,8 @@
 [tool.poetry]
-authors = ["Brandon Bjelland <brandonjacob@google.com>"]
+authors = ["Brandon Bjelland <brandon@atscale.run>"]
 description = ""
 name = "release-auto-promoter"
-packages = [
-  {include = "src"},
-]
+packages = [{include = "src"}]
 readme = "README.md"
 version = "0.1.0"
 

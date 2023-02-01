@@ -75,7 +75,7 @@ class BaseNotifier(abc.ABC):
             return JSONResponse(content={"status": "notifier disabled"})
 
         try:
-            self.action(config=config, **kwargs)
+            self.action(config=config, kwargs=kwargs)
         except Exception as err:
             logger.critical(err)
             return JSONResponse(

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import annotations
+
 from clouddeploy_notifier.settings import BaseNotifierSettings
 
 

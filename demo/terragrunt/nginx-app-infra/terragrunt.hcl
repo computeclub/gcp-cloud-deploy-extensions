@@ -40,6 +40,9 @@ dependency "release_auto_promoter_notifier" {
 }
 
 inputs = {
+  deployer_service_account_users = [
+    "serviceAccount:${dependency.release_auto_promoter_notifier.outputs.workload_service_account.email}"
+  ]
   enabled_cloud_deploy_notifiers = [
     dependency.echo_fastapi.outputs.config_annotation,
     dependency.release_auto_promoter_notifier.outputs.config_annotation,

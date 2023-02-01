@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Dict
-import uuid
-from clouddeploy_notifier.notifier import BaseNotifier
 import logging
+import uuid
+from typing import Any, Dict
 
+from clouddeploy_notifier.notifier import BaseNotifier
 from google.cloud import deploy
-from google.cloud.deploy_v1.types import Rollout, CreateRolloutRequest
+from google.cloud.deploy_v1.types import CreateRolloutRequest, Rollout
 
 logger = logging.getLogger(__name__)
 
