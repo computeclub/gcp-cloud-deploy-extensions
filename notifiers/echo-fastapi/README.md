@@ -6,8 +6,8 @@ configurations passed to the `execute()` method.
 
 ## User story
 
-As an engineer, I want an example notifier showing usage of the python-notifier
-library. It would also be useful if this example notifier could output pubsub
+As an engineer, I want an example notifier demonstrating usage of the python-notifier
+library. It would also be useful if this example notifier emitted pubsub
 message contents I can better understand the attribute conditions needed to
 build other notifiers.
 

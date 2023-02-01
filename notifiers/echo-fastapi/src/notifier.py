@@ -17,5 +17,5 @@ class Notifier(BaseNotifier):
         logging.debug("executing the action")
         logging.info("config: %s", config)
         logging.info("kw_arg_example: %s", kwargs["kw_arg_example"])
-        logging.info("message_attributes: %s", kwargs["message_attributes"])
-        logging.debug("action completed")
+        logging.info("message_attributes: %s", kwargs["message_attributes"].json())
+        logging.debug("action completed successfully")

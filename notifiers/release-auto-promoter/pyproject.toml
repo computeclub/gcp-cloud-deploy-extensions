@@ -10,7 +10,7 @@ version = "0.1.0"
 fastapi = "^0.89.1"
 google-cloud-deploy = "^1.6.1"
 python = "^3.10"
-python-clouddeploy-notifier = {git = "https://github.com/computeclub/gcp-cloud-deploy-notifiers.git", subdirectory = "lib/python-notifier", branch = "feat/extract-python-library"}
+python-clouddeploy-notifier = {git = "https://github.com/computeclub/gcp-cloud-deploy-notifiers.git", subdirectory = "lib/python-notifier", tag = "v0.1.0"}
 # python-clouddeploy-notifier = {path = "../../lib/python-notifier", develop = true}
 uvicorn = "^0.20.0"
 
