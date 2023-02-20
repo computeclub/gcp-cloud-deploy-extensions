@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "github.com/computeclub/gcp-cloud-deploy-notifiers//terraform/cloud-deploy-notifier?ref=v0.1.0"
+  source = "github.com/computeclub/gcp-cloud-deploy-notifiers//terraform/cloud-deploy-notifier?ref=v0.1.1"
   # source = "${find_in_parent_folders("gcp-cloud-deploy-notifiers")}//terraform/cloud-deploy-notifier"
   before_hook "before_hook" {
     commands = ["apply"]

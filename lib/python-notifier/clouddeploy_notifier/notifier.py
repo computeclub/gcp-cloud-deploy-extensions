@@ -2,7 +2,7 @@
 import abc
 import json
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 from clouddeploy_notifier.exceptions import UnkownPipeline
 
 from clouddeploy_notifier.types import (
@@ -28,10 +28,12 @@ class BaseNotifier(abc.ABC):
     """
 
     def __init__(self, request_json: Dict[str, Any], annotation: str) -> None:
-        self.pipeline = None
-        self.annotation = annotation
-        self.envelope = PubSubEnvelope(**request_json)
-        self.attributes = self.envelope.message.attributes
+        self.pipeline: DeliveryPipeline | None = None
+        self.annotation: str = annotation
+        self.envelope: PubSubEnvelope = PubSubEnvelope(**request_json)
+        self.attributes: ApprovalsAttributes | OperationsAttributes | ResourcesAttributes = (
+            self.envelope.message.attributes
+        )
 
     def action(self, config: Dict[str, Any], **kwargs):
         """
@@ -50,7 +52,7 @@ class BaseNotifier(abc.ABC):
         4. use the decrypted secret contents to execute the user-defined action()
         """
         try:
-            self.pipeline = self.get_pipeline(
+            self.pipeline: DeliveryPipeline | None = self.get_pipeline(
                 pipeline_id=self.get_pipeline_id(attributes=self.attributes)
             )
             if not self.pipeline:
@@ -71,7 +73,7 @@ class BaseNotifier(abc.ABC):
             secret_id=self.pipeline.annotations[self.annotation]
         )
         if not config:
-            logger.debug("configuration was either empty or set enabled to false")
+            logger.debug("The notifier is disabled for this deploy pipeline.")
             return JSONResponse(content={"status": "notifier disabled"})
 
         try:
@@ -155,9 +157,15 @@ class BaseNotifier(abc.ABC):
             logger.critical("secret could not be loaded as json: %s", err)
             return {}
 
-        if "enabled" not in secret_contents or secret_contents["enabled"] == False:
+        if "enabled" not in secret_contents:
             logger.info(
-                "This notifier is not enabled per the configuration: %s",
+                "enabled key not found in the configuration secret: %s",
+                secret_path,
+            )
+            return {}
+        if secret_contents["enabled"] == False:
+            logger.info(
+                "This notifier is disabled per the configuration secret: %s",
                 secret_path,
             )
             return {}

@@ -1,0 +1,14 @@
+steps:
+  # Build the container image
+  - name: "gcr.io/kaniko-project/executor:slim"
+    args:
+      [
+        "--destination=${_REGISTRY_REPO_URL}/${_APP_NAME}:latest",
+        "--cache=true",
+        "--log-format=text",
+        "--cache-ttl=24h",
+        "--context=.",
+      ]
+substitutions:
+  _APP_NAME: image-tagger
+  _REGISTRY_REPO_URL:

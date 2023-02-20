@@ -5,14 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.1] - Feb 1, 2022
+## [Unreleased] - Feb xx, 2023
+
+### Added
+
+- a notifier - `image-tagger` - for tagging images following successful rollout operations.
+
+## [0.1.1] - Feb 01, 2023
 
 ### Changed
 
 - fixed bugs in the example notifiers around kwargs processing.
 - moved to tag-based refs in terragrunt configurations to show a best practice using a stable artifact.
 
-## [0.1.0] - Jan 31, 2022
+## [0.1.0] - Jan 31, 2023
 
 ### Added
 

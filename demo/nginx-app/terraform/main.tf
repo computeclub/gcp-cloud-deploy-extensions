@@ -60,13 +60,18 @@ resource "google_clouddeploy_delivery_pipeline" "main" {
 }
 
 resource "google_clouddeploy_target" "main" {
-  provider    = google-beta
-  for_each    = local.main_deployment_targets
-  location    = var.region
-  project     = var.project_id
-  name        = "${var.app_name}-${each.key}"
-  labels      = {}
-  annotations = local.annotations
+  provider = google-beta
+  for_each = local.main_deployment_targets
+  location = var.region
+  project  = var.project_id
+  name     = "${var.app_name}-${each.key}"
+  labels   = {}
+  annotations = merge(
+    local.annotations,
+    {
+      "ENVIRONMENT" = each.key
+    }
+  )
   description = "The ${var.app_name} ${each.key} deployment target"
   execution_configs {
     usages = [
