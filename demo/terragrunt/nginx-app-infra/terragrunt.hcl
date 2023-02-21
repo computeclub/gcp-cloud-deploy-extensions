@@ -37,6 +37,11 @@ dependency "release_auto_promoter_notifier" {
   mock_outputs = {}
 }
 
+dependency "image_tagger_notifier" {
+  config_path  = "${find_in_parent_folders("terragrunt")}/image-tagger-notifier"
+  mock_outputs = {}
+}
+
 inputs = {
   deployer_service_account_users = [
     "serviceAccount:${dependency.release_auto_promoter_notifier.outputs.workload_service_account.email}"
@@ -44,6 +49,7 @@ inputs = {
   enabled_cloud_deploy_notifiers = [
     dependency.echo_fastapi.outputs.config_annotation,
     dependency.release_auto_promoter_notifier.outputs.config_annotation,
+    dependency.image_tagger_notifier.outputs.config_annotation,
   ]
   project_id = local.config.locals.project_id
 }

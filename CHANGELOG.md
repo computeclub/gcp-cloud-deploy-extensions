@@ -5,14 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.1] - Feb 1, 2022
+## [Unreleased] - Feb xx, 2023
+
+### Added
+
+- new notifier - `image-tagger` - for tagging images following successful rollout operations.
+
+### Changed
+
+- TODO(bjb): rename the repo to gcp-cloud-deploy-extensions
+- TODO(bjb): update Starlette to patch security bug: https://github.com/computeclub/gcp-cloud-deploy-notifiers/security/dependabot/2
+
+## [0.1.1] - Feb 01, 2023
 
 ### Changed
 
 - fixed bugs in the example notifiers around kwargs processing.
 - moved to tag-based refs in terragrunt configurations to show a best practice using a stable artifact.
 
-## [0.1.0] - Jan 31, 2022
+## [0.1.0] - Jan 31, 2023
 
 ### Added
 

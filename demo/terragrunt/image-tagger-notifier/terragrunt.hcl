@@ -3,8 +3,10 @@ include {
 }
 
 terraform {
-  source = "github.com/computeclub/gcp-cloud-deploy-notifiers//terraform/cloud-deploy-notifier?ref=v0.1.1"
-  # source = "${find_in_parent_folders("gcp-cloud-deploy-notifiers")}//terraform/cloud-deploy-notifier"
+  # TODO(bjb): bump this to main before merge and all sources to v0.2.0 when released
+  source = "${find_in_parent_folders("gcp-cloud-deploy-notifiers")}//terraform/cloud-deploy-notifier"
+  # source = "github.com/computeclub/gcp-cloud-deploy-notifiers//terraform/cloud-deploy-notifier?ref=main"
+  # source = "github.com/computeclub/gcp-cloud-deploy-notifiers//terraform/cloud-deploy-notifier?ref=v0.2.0"
   before_hook "before_hook" {
     commands = ["apply"]
     execute = [
@@ -21,7 +23,7 @@ terraform {
 
 locals {
   config        = read_terragrunt_config(find_in_parent_folders("config.hcl"))
-  notifier_path = "${find_in_parent_folders("gcp-cloud-deploy-notifiers")}/notifiers/release-auto-promoter"
+  notifier_path = "${find_in_parent_folders("gcp-cloud-deploy-notifiers")}/notifiers/image-tagger"
 }
 
 dependency "cloud_deploy_foundation" {
@@ -52,7 +54,7 @@ inputs = {
   env_vars = [
     {
       name  = "LOG_LEVEL"
-      value = "INFO"
+      value = "DEBUG"
     },
     {
       name = "SRC_SHA1"
@@ -69,10 +71,12 @@ inputs = {
       )
     },
   ]
-  notifier_name = "release-auto-promoter"
+  notifier_name = "image-tagger"
   project_id    = local.config.locals.project_id
   region        = "us-central1"
   workload_sa_project_roles = [
-    "roles/clouddeploy.releaser",
+    "roles/artifactregistry.writer",
+    "roles/clouddeploy.viewer",
+    # TODO(bjb): revisit if gcr.io permissions are needed. these roles dont seem to exist
   ]
 }

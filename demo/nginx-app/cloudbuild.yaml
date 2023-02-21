@@ -19,6 +19,7 @@ steps:
         "create",
         "release-${_EPOCH}",
         "--project=${PROJECT_ID}",
+        '--annotations="COMMIT_SHA=${COMMIT_SHA}"',
         "--region=us-central1",
         "--delivery-pipeline=nginx-app",
         "--images=${_REGISTRY_REPO_URL}/${_APP_NAME}=${_REGISTRY_REPO_URL}/${_APP_NAME}:latest",
