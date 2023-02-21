@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- a notifier - `image-tagger` - for tagging images following successful rollout operations.
+- new notifier - `image-tagger` - for tagging images following successful rollout operations.
+
+### Changed
+
+- TODO(bjb): rename the repo to gcp-cloud-deploy-extensions
 
 ## [0.1.1] - Feb 01, 2023
 

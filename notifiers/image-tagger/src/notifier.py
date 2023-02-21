@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
 import re
-from typing import Any, Dict, MutableMapping
+from typing import Any, Dict
 
 from clouddeploy_notifier.notifier import BaseNotifier
 from google.cloud import artifactregistry, deploy
+from google.api_core.exceptions import AlreadyExists
 from google.cloud.deploy_v1.types import (
     GetReleaseRequest,
     Release,
@@ -15,6 +16,7 @@ from google.cloud.artifactregistry_v1.types import (
     GetDockerImageRequest,
     ListDockerImagesRequest,
     CreateTagRequest,
+    UpdateTagRequest,
     Tag,
 )
 
@@ -39,8 +41,13 @@ class Notifier(BaseNotifier):
             image_url_parts[2],
             image_url_parts[3],
         )
+        repo_name = f"projects/{project_id}/locations/{location}/repositories/{repo_id}"
+        image_name = f"{repo_name}/dockerImages/{image_id}"
+        image_name_in_package_format = image_name.replace("dockerImages", "packages")
         return {
-            "image_name": f"projects/{project_id}/locations/{location}/repositories/{repo_id}/dockerImages/{image_id}",
+            "image_name": image_name,
+            "repo_name": repo_name,
+            "image_name_in_package_format": image_name_in_package_format,
             "image_url": image_url,
             "project_id": project_id,
             "location": location,
@@ -94,17 +101,14 @@ class Notifier(BaseNotifier):
         target_request = GetTargetRequest(
             name=f"projects/{self.attributes.ProjectNumber}/locations/{self.attributes.Location}/targets/{self.attributes.TargetId}"
         )
-        logger.debug("pre-target lookup")
 
         try:
             target: Target = deploy_client.get_target(request=target_request)
         except Exception as err:
-            logger.debug("error looking up the target")
             logger.exception(err)
             return None
 
-        annotations: MutableMapping[str, str] = target.annotations
-        logger.debug(annotations)
+        annotations: Dict[str, str] = dict(target.annotations)
 
         if "image_name" in annotations:
             image_request = GetDockerImageRequest(name=annotations["image_name"])
@@ -112,21 +116,26 @@ class Notifier(BaseNotifier):
         else:
             image = self.fetch_docker_image(
                 image_url=image_dict["image_url"],
-                repo_name=image_dict["image_name"],
+                repo_name=image_dict["repo_name"],
             )
             # TODO(bjb): store the image.name as image_name in annotations for future runs
-        logger.debug("checking for image")
         if not image:
             return None
-        image_dict["digest"], image_dict["image_name_no_digest"] = (
+        (
+            image_dict["digest"],
+            image_dict["image_name_no_digest"],
+            image_dict["image_name_packages_versions_format_with_digest"],
+            image_dict["image_name_packages_format_no_digest"],
+        ) = (
             image.name.split("@")[1],
             image.name.split("@")[0],
+            image.name.replace("dockerImages", "packages").replace("@", "/versions/"),
+            image.name.replace("dockerImages", "packages").split("@")[0],
         )
 
         replacements = annotations.copy()
         replacements["LONG_SHA"] = image.uri.split("@")[-1].split(":")[1]
         replacements["SHORT_SHA"] = replacements["LONG_SHA"][0:8]
-        logger.debug(replacements)
         new_tag_set = []
         # a regex pattern matching all text within the moustache of '${}'
         # (?<=\${) is a positive lookbehind that matches the characters ${ without including them in the final match.
@@ -145,18 +154,29 @@ class Notifier(BaseNotifier):
                 )
                 continue
             for match in matches:
-                tag_template.replace(match, replacements[match])
+                tag_template = tag_template.replace(
+                    "${%s}" % match, replacements[match]
+                )
             new_tag_set.append(tag_template)
 
         for _tag in new_tag_set:
+            # thank you https://blog.unit410.com/sre/security/2022/12/06/artifact-management-google-cloud.html
             tag = Tag(
-                name=f"{image_dict['image_name']}/tags/{_tag}",
-                version=f"{image_dict['image_name_no_digest']}/versions/{image_dict['digest']}",
+                name=f"{image_dict['image_name_packages_format_no_digest']}/tags/{_tag}",
+                version=image_dict["image_name_packages_versions_format_with_digest"],
             )
-            tag_request = CreateTagRequest(
-                parent=image.name,
+            create_tag_request = CreateTagRequest(
+                parent=image_dict["image_name_packages_format_no_digest"],
                 tag=tag,
+                tag_id=_tag,
             )
-            registry_client.create_tag(request=tag_request)
-
-        logger.info("The container image has been successfully tagged")
+            try:
+                registry_client.create_tag(request=create_tag_request)
+            except AlreadyExists as err:
+                logger.info("Tag already exists, moving the tag instead: %s", err)
+                update_tag_request = UpdateTagRequest(
+                    tag=tag,
+                )
+                registry_client.update_tag(request=update_tag_request)
+                logger.info("Tag updated successfully")
+        logger.info("Tagging complete for image %s", image.name)
