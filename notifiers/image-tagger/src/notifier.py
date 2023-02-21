@@ -118,7 +118,9 @@ class Notifier(BaseNotifier):
                 image_url=image_dict["image_url"],
                 repo_name=image_dict["repo_name"],
             )
-            # TODO(bjb): store the image.name as image_name in annotations for future runs
+            # TODO(bjb): The API for this doesn't exist yet but when it does use
+            # update_release() method to store the image.name as image_name in
+            # release annotations for future runs
         if not image:
             return None
         (

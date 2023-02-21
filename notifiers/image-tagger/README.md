@@ -9,8 +9,7 @@ in tags being added to the successfully deployed container image in a registry.
 A moving tag of `<ENV>-current` gives an at-a-glance view of what is currently
 deployed where when looking at a list of images in the registry. Likewise, tags
 having `<ENV>-<SHORT_SHA>` provide a historical record of what was previously
-deployed successfully to a target. Tagging should be supported within both
-Artifact Registry and Google Container Registry (legacy).
+deployed successfully to a target.
 
 ## Configuration schema
 

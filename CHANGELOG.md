@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - TODO(bjb): rename the repo to gcp-cloud-deploy-extensions
+- TODO(bjb): update Starlette to patch security bug: https://github.com/computeclub/gcp-cloud-deploy-notifiers/security/dependabot/2
 
 ## [0.1.1] - Feb 01, 2023
 
