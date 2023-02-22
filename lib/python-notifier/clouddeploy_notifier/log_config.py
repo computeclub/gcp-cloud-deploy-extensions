@@ -4,7 +4,7 @@
 import logging
 
 from google.cloud import logging as cloud_logging
-from clouddeploy_notifier.settings import settings
+from clouddeploy_extension.settings import settings
 
 LOGGING_CONFIG_DICT = {
     "version": 1,

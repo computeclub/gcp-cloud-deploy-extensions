@@ -6,7 +6,7 @@ import os
 from pydantic import BaseSettings
 
 
-class BaseNotifierSettings(BaseSettings):
+class BaseExtensionSettings(BaseSettings):
     """
     Application settings.
     """
@@ -20,4 +20,4 @@ class BaseNotifierSettings(BaseSettings):
         env_file = ".env"
 
 
-settings: BaseNotifierSettings = BaseNotifierSettings()
+settings: BaseExtensionSettings = BaseExtensionSettings()

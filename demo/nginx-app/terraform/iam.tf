@@ -35,20 +35,20 @@ resource "google_project_iam_member" "app_deployer" {
   member   = "serviceAccount:${google_service_account.app_deployer.email}"
 }
 
-resource "google_secret_manager_secret_iam_member" "cloud_deploy_notifiers_secret_accessor" {
+resource "google_secret_manager_secret_iam_member" "cloud_deploy_extensions_secret_accessor" {
   for_each  = google_secret_manager_secret.main
   project   = each.value.project
   secret_id = each.value.secret_id
   role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:${each.value.labels.notifier}@${var.project_id}.iam.gserviceaccount.com"
+  member    = "serviceAccount:${each.value.labels.extension}@${var.project_id}.iam.gserviceaccount.com"
 }
 
-resource "google_secret_manager_secret_iam_member" "cloud_deploy_notifiers_secret_viewer" {
+resource "google_secret_manager_secret_iam_member" "cloud_deploy_extensions_secret_viewer" {
   for_each  = google_secret_manager_secret.main
   project   = each.value.project
   secret_id = each.value.secret_id
   role      = "roles/secretmanager.viewer"
-  member    = "serviceAccount:${each.value.labels.notifier}@${var.project_id}.iam.gserviceaccount.com"
+  member    = "serviceAccount:${each.value.labels.extension}@${var.project_id}.iam.gserviceaccount.com"
 }
 
 resource "google_service_account_iam_member" "deployer_sa_users" {

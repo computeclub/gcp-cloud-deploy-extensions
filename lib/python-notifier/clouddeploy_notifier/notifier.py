@@ -3,9 +3,9 @@ import abc
 import json
 import logging
 from typing import Any, Dict
-from clouddeploy_notifier.exceptions import UnkownPipeline
+from clouddeploy_extension.exceptions import UnkownPipeline
 
-from clouddeploy_notifier.types import (
+from clouddeploy_extension.types import (
     ApprovalsAttributes,
     OperationsAttributes,
     PubSubEnvelope,
@@ -21,9 +21,9 @@ from google.cloud.secretmanager_v1.types import AccessSecretVersionRequest
 logger = logging.getLogger(__name__)
 
 
-class BaseNotifier(abc.ABC):
+class BaseExtension(abc.ABC):
     """
-    BaseNotifier is a base class providing common methods for notifiers
+    BaseExtension is a base class providing common methods for extensions
     to use.
     """
 
@@ -37,7 +37,7 @@ class BaseNotifier(abc.ABC):
 
     def action(self, config: Dict[str, Any], **kwargs):
         """
-        action is the core notifier action to be implemented by a library
+        action is the core extension action to be implemented by a library
         consumer.
         """
         raise NotImplementedError
@@ -45,9 +45,9 @@ class BaseNotifier(abc.ABC):
     def execute(self, **kwargs) -> JSONResponse:
         """
         execute is a high-level workflow executor to perform the most common
-        notifier workflow:
-        1. determine the pipeline that sent the notification
-        2. parse that pipeline's configuration checking for the notifier's annotation
+        extension workflow:
+        1. determine the pipeline that sent the extension
+        2. parse that pipeline's configuration checking for the extension's annotation
         3. use the annotation value to lookup a secret in secret manager
         4. use the decrypted secret contents to execute the user-defined action()
         """
@@ -73,15 +73,15 @@ class BaseNotifier(abc.ABC):
             secret_id=self.pipeline.annotations[self.annotation]
         )
         if not config:
-            logger.debug("The notifier is disabled for this deploy pipeline.")
-            return JSONResponse(content={"status": "notifier disabled"})
+            logger.debug("The extension is disabled for this deploy pipeline.")
+            return JSONResponse(content={"status": "extension disabled"})
 
         try:
             self.action(config=config, kwargs=kwargs)
         except Exception as err:
             logger.critical(err)
             return JSONResponse(
-                content={"status": "failed to execute the notifier action"},
+                content={"status": "failed to execute the extension action"},
             )
 
         return JSONResponse(content={"status": "executed successfully"})
@@ -165,7 +165,7 @@ class BaseNotifier(abc.ABC):
             return {}
         if secret_contents["enabled"] == False:
             logger.info(
-                "This notifier is disabled per the configuration secret: %s",
+                "This extension is disabled per the configuration secret: %s",
                 secret_path,
             )
             return {}
