@@ -12,8 +12,8 @@ terraform {
       "submit",
       "--project=${local.config.locals.project_id}",
       "--substitutions=_EPOCH=${run_cmd("date", "+%s")},_REGISTRY_REPO_URL=${dependency.app_artifact_registry.outputs.artifact_registry_repo_endpoint}",
-      "--config=${find_in_parent_folders("gcp-cloud-deploy-notifiers")}/demo/nginx-app/cloudbuild.yaml",
-      "${find_in_parent_folders("gcp-cloud-deploy-notifiers")}/demo/nginx-app/"
+      "--config=${find_in_parent_folders("gcp-cloud-deploy-extensions")}/demo/nginx-app/cloudbuild.yaml",
+      "${find_in_parent_folders("gcp-cloud-deploy-extensions")}/demo/nginx-app/"
     ]
   }
 }
@@ -32,24 +32,24 @@ dependency "echo_fastapi" {
   mock_outputs = {}
 }
 
-dependency "release_auto_promoter_notifier" {
-  config_path  = "${find_in_parent_folders("terragrunt")}/release-auto-promoter-notifier"
+dependency "release_auto_promoter_extension" {
+  config_path  = "${find_in_parent_folders("terragrunt")}/release-auto-promoter-extension"
   mock_outputs = {}
 }
 
-dependency "image_tagger_notifier" {
-  config_path  = "${find_in_parent_folders("terragrunt")}/image-tagger-notifier"
+dependency "image_tagger_extension" {
+  config_path  = "${find_in_parent_folders("terragrunt")}/image-tagger-extension"
   mock_outputs = {}
 }
 
 inputs = {
   deployer_service_account_users = [
-    "serviceAccount:${dependency.release_auto_promoter_notifier.outputs.workload_service_account.email}"
+    "serviceAccount:${dependency.release_auto_promoter_extension.outputs.workload_service_account.email}"
   ]
-  enabled_cloud_deploy_notifiers = [
+  enabled_cloud_deploy_extensions = [
     dependency.echo_fastapi.outputs.config_annotation,
-    dependency.release_auto_promoter_notifier.outputs.config_annotation,
-    dependency.image_tagger_notifier.outputs.config_annotation,
+    dependency.release_auto_promoter_extension.outputs.config_annotation,
+    dependency.image_tagger_extension.outputs.config_annotation,
   ]
   project_id = local.config.locals.project_id
 }

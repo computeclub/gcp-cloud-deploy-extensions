@@ -11,12 +11,12 @@ locals {
     }
   }
 
-  cloud_deploy_notifiers = { for ecd in var.enabled_cloud_deploy_notifiers :
+  cloud_deploy_extensions = { for ecd in var.enabled_cloud_deploy_extensions :
     ecd => google_secret_manager_secret.main[ecd].name
   }
   annotations = merge(
     var.annotations,
-    local.cloud_deploy_notifiers
+    local.cloud_deploy_extensions
   )
 }
 
@@ -89,12 +89,12 @@ resource "google_clouddeploy_target" "main" {
 }
 
 resource "google_secret_manager_secret" "main" {
-  for_each  = toset(var.enabled_cloud_deploy_notifiers)
+  for_each  = toset(var.enabled_cloud_deploy_extensions)
   project   = var.project_id
   secret_id = format("%s-%s", var.app_name, split("/", each.key)[1])
   labels = {
-    app      = var.app_name
-    notifier = split("/", each.key)[1]
+    app       = var.app_name
+    extension = split("/", each.key)[1]
   }
   replication {
     automatic = true

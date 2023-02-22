@@ -1,8 +1,8 @@
 [tool.poetry]
 authors = ["Brandon Bjelland <brandonjacob@google.com>"]
 description = ""
-name = "python-clouddeploy-notifier"
-packages = [{include = "clouddeploy_notifier"}]
+name = "python-clouddeploy-extension"
+packages = [{include = "clouddeploy_extension"}]
 readme = "README.md"
 version = "0.1.0"
 
