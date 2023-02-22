@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "github.com/computeclub/gcp-cloud-deploy-extensions//terraform/cloud-deploy-extension?ref=v0.1.1"
+  source = "github.com/computeclub/gcp-cloud-deploy-extensions//terraform/cloud-deploy-extension?ref=main"
   # source = "${find_in_parent_folders("gcp-cloud-deploy-extensions")}//terraform/cloud-deploy-extension"
   before_hook "before_hook" {
     commands = ["apply"]

@@ -27,8 +27,8 @@ dependency "app_artifact_registry" {
   mock_outputs = {}
 }
 
-dependency "echo_fastapi" {
-  config_path  = "${find_in_parent_folders("terragrunt")}/echo-fastapi"
+dependency "echo_fastapi_extension" {
+  config_path  = "${find_in_parent_folders("terragrunt")}/echo-fastapi-extension"
   mock_outputs = {}
 }
 
@@ -47,7 +47,7 @@ inputs = {
     "serviceAccount:${dependency.release_auto_promoter_extension.outputs.workload_service_account.email}"
   ]
   enabled_cloud_deploy_extensions = [
-    dependency.echo_fastapi.outputs.config_annotation,
+    dependency.echo_fastapi_extension.outputs.config_annotation,
     dependency.release_auto_promoter_extension.outputs.config_annotation,
     dependency.image_tagger_extension.outputs.config_annotation,
   ]
