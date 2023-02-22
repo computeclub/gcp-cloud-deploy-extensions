@@ -7,10 +7,10 @@ readme = "README.md"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
-fastapi = "^0.89.1"
+fastapi = "^0.92.0"
 google-cloud-deploy = "^1.6.1"
 python = "^3.10"
-python-clouddeploy-extension = {git = "https://github.com/computeclub/gcp-cloud-deploy-extensions.git", subdirectory = "lib/python-extension", tag = "v0.1.0"}
+python-clouddeploy-extension = {git = "https://github.com/computeclub/gcp-cloud-deploy-extensions.git", subdirectory = "lib/python-extension"}# , tag = "v0.1.0"}
 # python-clouddeploy-extension = {path = "../../lib/python-extension", develop = true}
 uvicorn = "^0.20.0"
 
