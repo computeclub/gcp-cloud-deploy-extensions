@@ -19,7 +19,7 @@ spec:
       containerConcurrency: 1
       timeoutSeconds: 3600
       containers:
-        - image: us-docker.pkg.dev/bf-infra-tooling-xyz/demo/nginx-app:latest
+        - image: us-docker.pkg.dev/bf-infra-tooling-xyz/demo/nginx-app
           ports:
             - name: http1
               containerPort: 80

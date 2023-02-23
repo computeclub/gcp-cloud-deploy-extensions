@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - Feb xx, 2023
+## [0.2.0] - Feb 23, 2023
 
 ### Added
 
@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - renamd the repo to gcp-cloud-deploy-extensions
 - update fastapi to patch Starlette security vulnerability: https://github.com/computeclub/gcp-cloud-deploy-extensions/security/dependabot/2
 - refactored image-tagger for readability/testability
+- nginx-app demo app now uses the cloudbuild `BUILD_ID` as the image tag passed when creating a release. This makes for deterministic releases.
 
 ## [0.1.1] - Feb 01, 2023
 
