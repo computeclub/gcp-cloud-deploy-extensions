@@ -65,8 +65,8 @@ class Extension(BaseExtension):
 
         target_annotations: Dict[str, str] = dict(target.annotations)
         replacements = target_annotations.copy()
-        replacements["LONG_SHA"] = image.uri.split("@")[-1].split(":")[1]
-        replacements["SHORT_SHA"] = replacements["LONG_SHA"][0:8]
+        replacements["FULL_DIGEST"] = image.uri.split("@")[-1].split(":")[1]
+        replacements["SHORT_DIGEST"] = replacements["FULL_DIGEST"][0:12]
 
         tag_set = self.render_tag_set(
             replacements=replacements,
