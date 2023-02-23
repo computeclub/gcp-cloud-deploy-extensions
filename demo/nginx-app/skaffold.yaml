@@ -7,8 +7,6 @@ build:
   googleCloudBuild:
     projectId: bf-infra-tooling-xyz
     serviceAccount: projects/bf-infra-tooling-xyz/serviceAccounts/dev-deployer@bf-infra-tooling-xyz.iam.gserviceaccount.com
-  tagPolicy:
-    gitCommit: {}
   artifacts:
     - image: us-docker.pkg.dev/bf-infra-tooling-xyz/demo/nginx-app
       kaniko:
