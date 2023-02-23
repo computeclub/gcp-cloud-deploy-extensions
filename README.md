@@ -16,12 +16,12 @@ Deploy also lacks some features and functionality of established CI/CD tools
 post-deploy image tagging, etc.) but instead gives extension points via
 [PubSub extensions](https://cloud.google.com/deploy/docs/subscribe-deploy-extensions)
 to flexibly fill these gaps. The extension solutions here stand up infrastructure
-and services necessary to build on top of that extension platform.
+and services necessary to build on top of that extensible platform.
 
 ## Architecture
 
 The extension recipes here follow a very similar deployment pattern to the solutions
-in cloud-builders-community and cloud-build-extensions. Namely, source code,
+in cloud-builders-community and cloud-build-notifiers. Namely, source code,
 dockerfiles, and cloudbuild configurations are packaged for users to build, store,
 and deploy container images to their GCP projects.
 
@@ -35,7 +35,7 @@ to manage all dependent infra.
 In either case, including an example of the variable inputs in an `example.tfvars`
 file is a simple way to guide extension consumers on how to run this terraform.
 
-## Per Pipeline extension configuration
+## Per-pipeline extension configuration
 
 Once deployed, extensions are configured via workload deploy pipelines that opt-in
 to using them. Following a kubernetes-style configuration approach, each extension
@@ -47,7 +47,7 @@ This secret should contain configuration values that the extension unpacks durin
 an execution. This is a powerful pattern for a few reasons:
 
 1. It's secure - some extensions will require secret data, others won't necessarily, but it's a good practice to treat all configuration as potentially sensitive and RBAC controlled.
-2. Extensions can be liberally deployed without affecting existing deploy pipelines - enabling a extension requires an annotation on opting-in deployment pipelines and the configuration in secret manager.
+2. Extensions can be liberally deployed without affecting existing pipelines - enabling a extension requires an annotation on opting-in deployment pipelines and the configuration in secret manager.
 
 ## Deploy extension index
 
