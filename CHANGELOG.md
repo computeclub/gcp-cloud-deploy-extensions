@@ -10,11 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - new extension - `image-tagger` - for tagging images following successful rollout operations.
+- added basic tests to the python library
 
 ### Changed
 
-- TODO(bjb): rename the repo to gcp-cloud-deploy-extensions
-- TODO(bjb): update Starlette to patch security bug: https://github.com/computeclub/gcp-cloud-deploy-extensions/security/dependabot/2
+- renamd the repo to gcp-cloud-deploy-extensions
+- update fastapi to patch Starlette security vulnerability: https://github.com/computeclub/gcp-cloud-deploy-extensions/security/dependabot/2
+- refactored image-tagger for readability/testability
 
 ## [0.1.1] - Feb 01, 2023
 
