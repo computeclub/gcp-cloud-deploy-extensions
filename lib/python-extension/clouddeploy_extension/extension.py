@@ -79,7 +79,7 @@ class BaseExtension(abc.ABC):
         try:
             self.action(config=config, kwargs=kwargs)
         except Exception as err:
-            logger.critical(err)
+            logger.exception(err)
             return JSONResponse(
                 content={"status": "failed to execute the extension action"},
             )

@@ -10,10 +10,10 @@ from pydantic import BaseModel
 class BaseAttributes(BaseModel):
     """BaseAttributes."""
 
-    DeliveryPipelineId: str
+    DeliveryPipelineId: Optional[str]
     Location: str
     ProjectNumber: str
-    ReleaseId: str
+    ReleaseId: Optional[str]
     RolloutId: Optional[str]
     TargetId: Optional[str]
 
