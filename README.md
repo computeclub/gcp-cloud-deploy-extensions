@@ -5,49 +5,51 @@ state transitions.
 
 Similar to the collection of cloud builders at
 [cloud-builders-community](https://github.com/GoogleCloudPlatform/cloud-builders-community)
-and extensions at
-[cloud-build-extensions](https://github.com/GoogleCloudPlatform/cloud-build-extensions),
+and notifiers at
+[cloud-build-notifiers](https://github.com/GoogleCloudPlatform/cloud-build-notifiers),
 this repo aims to be a commons of utilities to enhance
 [Google Cloud Deploy](https://cloud.google.com/deploy/docs/overview). Google
 Cloud Deploy provides essential primitives, a useful UI, and granular permissions
 for managing releases that can span many environments in Google Cloud. Cloud
-Deploy also lacks some features and functionality of established CI/CD tools
-(extensions, conditional release promotion, auto-rollback on verification failure,
-post-deploy image tagging, etc.) but instead gives extension points via
-[PubSub extensions](https://cloud.google.com/deploy/docs/subscribe-deploy-extensions)
-to flexibly fill these gaps. The extension solutions here stand up infrastructure
-and services necessary to build on top of that extensible platform.
+Deploy is also very recently GA and lacks some features and functionality of
+established CI/CD tools (notifications, conditional release promotion,
+auto-rollback on verification failure, post-deploy image tagging, etc.). Instead
+gives an interface via [PubSub notifications](https://cloud.google.com/deploy/docs/subscribe-deploy-extensions)
+to fill the gaps. The extension solutions here stand up infrastructure and
+services necessary to build on top of Cloud Deploy lifecycle events.
 
 ## Architecture
 
-The extension recipes here follow a very similar deployment pattern to the solutions
-in cloud-builders-community and cloud-build-notifiers. Namely, source code,
+The services under `extensions/` follow a similar deployment pattern to those
+found in cloud-builders-community and cloud-build-notifiers. Namely, source code,
 dockerfiles, and cloudbuild configurations are packaged for users to build, store,
 and deploy container images to their GCP projects.
 
 Expanding on this pattern, to manage extension infra, authors should either:
 
-1. verify the `terraform/cloud-deploy-extension` root module is sufficient to
-manage all dependent infra for the extension or
-2. build a small terraform module, that likely calls `terraform/cloud-deploy-extension`
-to manage all dependent infra.
+1. verify the `terraform/cloud-deploy-extension` terraform root module is
+sufficient to manage all dependent infra for the extension or
+2. build a small terraform root module, that likely calls `terraform/cloud-deploy-extension`
+as a component module to manage all dependent infra.
 
 In either case, including an example of the variable inputs in an `example.tfvars`
-file is a simple way to guide extension consumers on how to run this terraform.
+file is a simple way to guide users on how to easily stand up infra.
 
 ## Per-pipeline extension configuration
 
-Once deployed, extensions are configured via workload deploy pipelines that opt-in
-to using them. Following a kubernetes-style configuration approach, each extension
-has a distinct configuration annotation key that Cloud Deploy Pipelines must
-include if they want to leverage a extension.
+Once deployed, extensions are configured via configuration attached to workload
+Deploy Pipelines. Workloads use an extension on an opt-in basis. Following a
+kubernetes-like configuration approach, each extension has a distinct
+configuration annotation key that Cloud Deploy Pipelines must include if they
+want to leverage a extension.
 
 The annotation value should point to a user-configured secret in Secret Manager.
-This secret should contain configuration values that the extension unpacks during
-an execution. This is a powerful pattern for a few reasons:
+This secret contains configuration values that the extension unpacks during
+execution. This is a powerful pattern for a few reasons:
 
 1. It's secure - some extensions will require secret data, others won't necessarily, but it's a good practice to treat all configuration as potentially sensitive and RBAC controlled.
-2. Extensions can be liberally deployed without affecting existing pipelines - enabling a extension requires an annotation on opting-in deployment pipelines and the configuration in secret manager.
+2. Extensions can be liberally deployed without affecting existing pipelines - enabling a extension requires an annotation for opting-in deployment pipelines and the configuration in secret manager.
+3. Configuration can be as expressive as you need - Secret manager secret versions can be large (up to 64K) and the standard utf-8 charset is supported.
 
 ## Deploy extension index
 
