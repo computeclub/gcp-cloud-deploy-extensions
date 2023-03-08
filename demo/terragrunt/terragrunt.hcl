@@ -1,5 +1,20 @@
 terragrunt_version_constraint = ">= 0.42"
 
+terraform {
+  after_hook "set_success" {
+    commands     = ["apply"]
+    execute      = ["touch", "${get_terragrunt_dir()}/.tg_state"]
+    run_on_error = false
+  }
+  error_hook "set_failure" {
+    commands = ["apply"]
+    execute  = ["rm", "${get_terragrunt_dir()}/.tg_state"]
+    on_errors = [
+      ".*",
+    ]
+  }
+}
+
 remote_state {
   backend = "gcs"
   config = {
@@ -13,7 +28,7 @@ remote_state {
 }
 
 locals {
-  config = read_terragrunt_config("${find_in_parent_folders("terragrunt")}/config.hcl")
+  config = read_terragrunt_config("${find_in_parent_folders("terragrunt")}/config.hcl.json")
 }
 
 generate "backend" {

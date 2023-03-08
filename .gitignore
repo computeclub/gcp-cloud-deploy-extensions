@@ -127,9 +127,12 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+config.hcl.json
 config.hcl
 .terragrunt-cache
 .terraform
 .terraform.lock.hcl
 .vscode/settings.json
 .env
+.DS_Store
+.tg_state

@@ -20,7 +20,7 @@ terraform {
 }
 
 locals {
-  config         = read_terragrunt_config(find_in_parent_folders("config.hcl"))
+  config         = read_terragrunt_config(find_in_parent_folders("config.hcl.json"))
   extension_path = "${find_in_parent_folders("gcp-cloud-deploy-extensions")}/extensions/echo-fastapi"
 }
 

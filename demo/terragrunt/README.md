@@ -15,7 +15,7 @@ full context walkthrough but jump here to stand up everything at once.
 1. configure terragrunt to use a central CI/CD project:
 
     ```bash
-    cp example.config.hcl config.hcl
+    cp example.config.hcl.json config.hcl.json
     # populate relevant values
-    code config.hcl
+    code config.hcl.json
     ```

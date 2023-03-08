@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Workspace Index</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <h1>{{ dir_name }}</h1>
+
+  <h2>Workspace configuration</h2>
+  <form class="form-group" method="post" action="/save_root_config/", id="myForm">
+    {% for k,v in root_config.get('locals', {"project_id": "","remote_state_bucket": "${local.project_id}-cloud-deploy-extensions-tf-states"}).items() %}
+      <label for="{{ k }}">{{ k }}</label>
+      <input name="{{ k }}" type="{{ k }}" class="form-control" id="{{ k }}" value="{{ v }}" required>
+    {% endfor %}
+    <input class="btn btn-primary", type="button", value="Save" onclick="submitForm()">
+  </form>
+ <div id="responseArea"></div>
+ <script>
+    function submitForm() {
+        var formElement = document.getElementById('myForm');
+        var data = new FormData(formElement);
+        fetch('/submit', {
+              method: 'POST',
+              body: data,
+            })
+            .then(resp => resp.text())
+            .then(data => {
+              document.getElementById("responseArea").innerHTML = data;
+            })
+            .catch(error => {
+              console.error(error);
+            });
+    }
+ </script>
+
+</div>
+</body>
+</html>

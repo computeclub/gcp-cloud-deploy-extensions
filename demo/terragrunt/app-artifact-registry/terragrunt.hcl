@@ -7,7 +7,7 @@ terraform {
 }
 
 locals {
-  config = read_terragrunt_config(find_in_parent_folders("config.hcl"))
+  config = read_terragrunt_config(find_in_parent_folders("config.hcl.json"))
 }
 
 inputs = {

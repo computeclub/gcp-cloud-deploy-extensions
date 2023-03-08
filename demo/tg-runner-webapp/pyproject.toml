@@ -1,0 +1,23 @@
+[tool.poetry]
+authors = ["Brandon Bjelland <brandon@atscale.run>"]
+description = ""
+name = "tg-runner-webapp"
+packages = [{include = "tg_runner_webapp"}]
+readme = "README.md"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+fastapi = "^0.92.0"
+jinja2 = "^3.1.2"
+python = "^3.11"
+uvicorn = "^0.20.0"
+pyhcl = "^0.4.4"
+python-multipart = "^0.0.6"
+google-cloud-secret-manager = "^2.16.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]

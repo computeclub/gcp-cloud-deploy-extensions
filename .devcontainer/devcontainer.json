@@ -1,5 +1,5 @@
 {
-  "name": "Python 3",
+  "name": "cloud deploy extensions",
   "build": {
     "dockerfile": "Dockerfile",
     "context": "..",
